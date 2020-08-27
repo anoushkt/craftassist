@@ -18,12 +18,13 @@ function saveTemplateObject(block, name) {
     .getElementById("surfaceForms")
     .innerText.split("\n");
 
+  // if categorical
+
   var actionDict = document.getElementById("actionDict").innerText;
+
   if (actionDict) {
     // associated with code
     actionDict = JSON.parse(actionDict);
-  } else {
-    actionDict = undefined;
   }
   var templateObjectsSaved = localStorage.getItem("templates");
   if (templateObjectsSaved) {
@@ -32,9 +33,13 @@ function saveTemplateObject(block, name) {
     templateObjectsSaved = {};
   }
 
-  templateObjectsSaved[name] = {};
+  if (!templateObjectsSaved[name]) {
+    templateObjectsSaved[name] = {};
+  }
   templateObjectsSaved[name]["surfaceForms"] = surfaceForms;
-  templateObjectsSaved[name]["code"] = actionDict;
+  if (actionDict) {
+    templateObjectsSaved[name]["code"] = actionDict;
+  }
   console.log(templateObjectsSaved);
   localStorage.setItem("templates", JSON.stringify(templateObjectsSaved));
 

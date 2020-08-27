@@ -9,7 +9,6 @@
  * @fileoverview This file defines functions to return arrays of surface forms given templates and an array of arrays of surface forms.
  */
 
-
 /**
  * This is a function to return randomly picked surface forms for each template object within an array of template objects.
  */
@@ -27,7 +26,6 @@ function getSurfaceForms(allBlocks) {
   });
   return surfaceForms;
 }
-
 
 /**
  * This is a function to return an array of 
@@ -48,7 +46,6 @@ function getSurfaceFormsFromList(surfaceFormsList) {
   return surfaceForms;
 }
 
-
 /**
  * This is a function to get all surface forms associated with
  * all elements of an array of template objects. So, this function takes in
@@ -61,10 +58,9 @@ function generateAllSurfaceFormsForTemplate(allBlocks) {
   if (templates) {
     // template information exists
     templates = JSON.parse(templates);
-  }
-  else{
-     // no templates saved
-     templates={};
+  } else {
+    // no templates saved
+    templates = {};
   }
 
   var surfaceForms = [];
@@ -74,17 +70,20 @@ function generateAllSurfaceFormsForTemplate(allBlocks) {
     var surfaceForm = templates[element.getFieldValue("name")]["surfaceForms"];
     surfaceForms.push(surfaceForm);
   });
-  
+
   return surfaceForms;
 }
 
-
 // Function that returns a random item from a list
 function randomFromList(list) {
-    var number_length = list.length;
-    // Assemble JavaScript into code variable.
-    var x = Math.floor(Math.random() * number_length);
-    return list[x];
-  }
-  
-export {getSurfaceForms,getSurfaceFormsFromList,generateAllSurfaceFormsForTemplate}
+  var number_length = list.length;
+  // Assemble JavaScript into code variable.
+  var x = Math.floor(Math.random() * number_length);
+  return list[x];
+}
+
+export {
+  getSurfaceForms,
+  getSurfaceFormsFromList,
+  generateAllSurfaceFormsForTemplate,
+};

@@ -23,9 +23,19 @@ function generateCodeArrayForTemplate(blocks) {
 
   blocks.forEach((element) => {
     // push code for this element
-    codeList.push(templates[element.getFieldValue("name")]["code"]);
+    //const parent=element.getFieldValue("parent");
+    const curCode = templates[element.getFieldValue("name")]["code"];
+    /*var code=curCode;
+    if(code){
+      if(parent){
+        code={};
+        code[parent]=curCode;
+      }
+    }*/
+
+    codeList.push(curCode);
   });
-  
+
   return codeList;
 }
 export default generateCodeArrayForTemplate;

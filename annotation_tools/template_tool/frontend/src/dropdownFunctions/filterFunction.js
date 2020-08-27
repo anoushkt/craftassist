@@ -19,7 +19,7 @@ function filterFunction() {
 
   // Loop through all list items, and hide those who don't match the search query
   for (var i = 0; i < listElements.length; i++) {
-    var textContainer= listElements[i].getElementsByTagName("a")[0];
+    var textContainer = listElements[i].getElementsByTagName("a")[0];
     txtValue = textContainer.textContent || textContainer.innerText;
     if (txtValue.toUpperCase().indexOf(filter) > -1) {
       listElements[i].style.display = "";

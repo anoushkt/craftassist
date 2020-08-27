@@ -1,11 +1,30 @@
-To run the template tool, you must run the frontend and backend.
+The goal of this tool is to enable users to efficiently create templates for the CraftAssist bot. A [Blockly](https://developers.google.com/blockly) interface is used. This project is in active development.
 
-In both frontend and backend, do
+# Installation
 
-`npm install`
+Open a terminal in the ``` template_tool ``` folder and do
+```
+cd frontend
+npm install
+npm start
+```
+This will spawn a ```localhost``` window. 
 
-`npm start`
+Open another terminal in the ``` template_tool ``` folder and do
+```
+cd backend
+npm install
+npm start
+```
 
-If either fails, do `npm rebuild`.
+If either installation fails, do ``` npm rebuild```.
 
-A web server would be spawned in localhost.
+# Usage
+
+For instructions on using the tool, refer to [usage doc](https://github.com/anoushkt/craftassist/blob/master/annotation_tools/template_tool/usage.md#usage)
+
+## License
+
+CraftAssist is [MIT licensed](./LICENSE).
+
+<sup>1</sup> Minecraft features: © Mojang Synergies AB included courtesy of Mojang AB
