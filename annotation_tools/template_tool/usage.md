@@ -55,7 +55,7 @@ A template is a collection of template objects connected together. It is also a 
 
   ### Creating template objects
 
-  1. Drag one of the `custom block` into the Blockly workspace.
+  1. Drag one of the `template object` into the Blockly workspace.
 
   2. Write the name of the template object into the editable box on the block.
 
@@ -67,6 +67,16 @@ A template is a collection of template objects connected together. It is also a 
 
 
   6. You may also tag the block using the `save by tag` option. Tags may be shared by multiple blocks. 
+
+
+  ### Assigning parents to template objects
+
+  1. Drag a `parent` into the workspace. 
+  ![alt text](images/parent.png)
+
+  2. In the editable text box, write the name of a spec doc element `(eg:reference_object)`. The generated dictionary for the template object connected to the parent block will then be wrapped in `{reference_object:{1}}`. The generated dictionary by the template object will replace 1.
+  
+  3. To specify more levels, type in a "." seperated string in the editable text box.
 
   ### Creating templates
 
