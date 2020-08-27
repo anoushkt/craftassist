@@ -150,6 +150,7 @@ function getCodeForBlocks() {
     surfaceForm + "     " + JSON.stringify(skeletal, null, 2) + "\n";
 
   document.getElementById("surfaceForms").innerText += surfaceForm + "\n";
+  localStorage.setItem("current", document.getElementById("surfaceForms").innerText);
 }
 
 export default getCodeForBlocks;
