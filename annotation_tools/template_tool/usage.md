@@ -63,10 +63,10 @@ A template is a collection of template objects connected together. It is also a 
 
   4.  Write a single logical form in the box labelled `Enter logical forms`. 
 
-  5. Right click on the block and choose `save by name`. The block is now available in the search box. 
+  5. Right click on the block and choose `save by name`. The block is now available in the search box. The name must not contain spaces.
 
 
-  6. You may also tag the block using the `save by tag` option. Tags may be shared by multiple blocks. 
+  6. You may also tag the block using the `save by tag` option. Tags may be shared by multiple blocks. The name must not contain spaces.
 
 
   ### Assigning parents to template objects
