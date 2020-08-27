@@ -99,5 +99,3 @@ A template is a collection of template objects connected together. It is also a 
 
 For placeholders (eg: for spans and categoricals), use " ".
 
-
-![alt text](images/roseA.png)
