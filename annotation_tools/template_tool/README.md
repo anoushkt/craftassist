@@ -21,7 +21,7 @@ If either installation fails, do ``` npm rebuild```.
 
 # Usage
 
-For instructions on using the tool, refer to [usage doc](https://github.com/anoushkt/craftassist/blob/master/annotation_tools/template_tool/usage.md#usage)
+For instructions on using the tool, refer to [usage doc](usage.md#usage)
 
 ## License
 
