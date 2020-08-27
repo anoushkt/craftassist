@@ -88,14 +88,29 @@ A template is a collection of template objects connected together. It is also a 
 
   Click on `generate code` to generate surface-logical form pairs for templates.
 
+  ### Dictionary formation
+
+  1. The template is traversed left to right.
+
+  2. If a parent is specified, the dictionary is wrapped in its parents.
+
+  3. The skeletal is checked for the existence of a path/subpath that contains the keys that the template object generates. If such a path exists, follow the path as deep as possible and then plug in the code for the template object.
+  
   ### Correcting surface forms for templates
   1. First, generate from the template and save the template.
 
   2. Edit surface forms in place and click on `save changes`.
 
+  ### Random
+
+  1. For random categorical values, first create template objects for each categorical, fixing the value of the categorical in the dictionary for each template object.
+
+  2. Use the `random from list` block to random over template objects.
+
+  3. For example, for a random direction, write the names of the directions you want to random over, comma seperated (after creating template objects for the directions). Do NOT leave a space after or before the comma.
 
 
 ## Dictionary specs
 
-For placeholders (eg: for spans and categoricals), use " ".
+For placeholders (eg: for spans and categoricals), use "".
 

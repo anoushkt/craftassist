@@ -63,8 +63,8 @@ function saveBlockCallback(block) {
 
   // refresh the dropdown selections
   window.location.reload(true);
-  //$("#UL"). load();
-  Blockly.Xml.domToWorkspace(
+
+  Blockly.Xml.DomToWorkspace(
     Blockly.Xml.blockToDom(block, true),
     Blockly.mainWorkspace
   );
