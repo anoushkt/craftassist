@@ -21,7 +21,7 @@ If either installation fails, do ``` npm rebuild```.
 
 # Usage
 
-For instructions on using the tool, refer to [usage doc](/usage.md#usage)
+For instructions on using the tool, refer to [usage doc](/usage.md)
 
 ## License
 
