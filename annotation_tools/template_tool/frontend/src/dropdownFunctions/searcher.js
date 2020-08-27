@@ -13,20 +13,13 @@ import Blockly, { Generator } from "blockly/core";
 import $ from "jquery";
 function searchForBlocks() {
   // add a default block to toolbox
-  document.getElementById("toolBox").innerHTML = ``;
+  document.getElementById(
+    "toolBox"
+  ).innerHTML = `<block xmlns="https://developers.google.com/blockly/xml" type="customBlock"><field name="optional">TRUE</field><field name="text">Customisable block</field></block>`;
   Blockly.mainWorkspace.updateToolbox(document.getElementById("toolBox"));
 
   // name/tag the user wants
   var nameOrTag = document.getElementById("searchInput").innerText;
-  if (nameOrTag == "Custom block") {
-    document.getElementById(
-      "toolBox"
-    ).innerHTML = `<block xmlns="https://developers.google.com/blockly/xml" type="random"></block>
-    <block xmlns="https://developers.google.com/blockly/xml" type="parent"></block>
-    <block xmlns="https://developers.google.com/blockly/xml" type="textBlock"></block>`;
-    Blockly.mainWorkspace.updateToolbox(document.getElementById("toolBox"));
-    return;
-  }
 
   var taggedInfoString = localStorage.getItem("tags");
   var taggedInfo;
@@ -48,7 +41,7 @@ function searchForBlocks() {
       });
     }
   }
-  var namedInfoString = localStorage.getItem("savedByName");
+  var namedInfoString= localStorage.getItem("savedByName");
   var namedInfo;
   if (namedInfoString) {
     // search in names

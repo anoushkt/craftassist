@@ -21,9 +21,7 @@ const tagBlockCallback = (block) => {
   currentTagInfo[tag] = infoOfCurTag;
   localStorage.setItem("tags", JSON.stringify(currentTagInfo));
   var currentDropdownInfo = JSON.parse(localStorage.getItem("blocks"));
-  if (!currentDropdownInfo.includes(tag)) {
-    currentDropdownInfo.push(tag);
-  }
+  currentDropdownInfo.push(tag);
   localStorage.setItem("blocks", JSON.stringify(currentDropdownInfo));
 
   saveToFile();

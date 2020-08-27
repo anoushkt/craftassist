@@ -10,7 +10,7 @@ function highlightSelectedText() {
   // the text to be highlighted will be wrapped in a spam
   var span = document.createElement("span");
 
-  var color = "#ff0000";
+  var color = document.getElementById("colors").value;
 
   // change the background color and weight of the created span
   span.style.backgroundColor = color;
@@ -22,6 +22,16 @@ function highlightSelectedText() {
   range.surroundContents(span);
   selectedText.removeAllRanges();
   selectedText.addRange(range);
+
+  // convert color to hex
+  var highlightColor = span.style.backgroundColor.split("(")[1].split(")")[0];
+  highlightColor = highlightColor.split(",");
+  var colorInHex = highlightColor.map(function (x) {
+    x = parseInt(x).toString(16);
+    return x.length === 1 ? "0" + x : x;
+  });
+
+  colorInHex = "#" + colorInHex.join("");
 
   // save information about highlighted text under "spans". The highlighted part of the text is the span.
 

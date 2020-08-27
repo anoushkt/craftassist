@@ -42,9 +42,9 @@ function saveToFile() {
 }
 
 function callAPI(data) {
-  const HOST = "http://localhost:";
-  const PORT = "9000";
-  fetch(HOST + PORT + "/readAndSaveToFile", {
+  const HOST="http://localhost:";
+  const PORT="9000";
+  fetch(HOST+PORT+"/readAndSaveToFile", {
     method: "POST",
     headers: {
       Accept: "application/json",

@@ -19,10 +19,8 @@ function saveBlockCallback(block) {
 
   // wrap the block in xml tags
   var fullBlockXML = `<xml xmlns="https://developers.google.com/blockly/xml">${blockAsText}</xml>`;
-  var name;
-  if (block.type == "random") {
-    name = window.prompt("Enter name");
-  } else name = block.getFieldValue("name");
+
+  var name = block.getFieldValue("name");
   var allBlocks = Blockly.mainWorkspace.getAllBlocks();
   if (allBlocks.length != 1) {
     // not a single template object
@@ -47,10 +45,7 @@ function saveBlockCallback(block) {
   localStorage.setItem("savedByName", JSON.stringify(currentSavedInfo));
 
   var currentDropdownInfo = JSON.parse(localStorage.getItem("blocks"));
-  if (!currentDropdownInfo.includes(name)) {
-    currentDropdownInfo.push(name);
-  }
-
+  currentDropdownInfo.push(name);
   localStorage.setItem("blocks", JSON.stringify(currentDropdownInfo));
 
   // wrap the block name in option tags
@@ -63,12 +58,6 @@ function saveBlockCallback(block) {
 
   // refresh the dropdown selections
   window.location.reload(true);
-  //$("#UL"). load();
-  Blockly.Xml.domToWorkspace(
-    Blockly.Xml.blockToDom(block, true),
-    Blockly.mainWorkspace
-  );
-  console.log(Blockly.mainWorkspace.getAllBlocks());
 }
 
 export default saveBlockCallback;

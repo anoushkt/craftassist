@@ -14,8 +14,9 @@ import $ from "jquery";
 // This function restores local storage information by requesting the backend to provide the dumped contents of local storage.
 
 function restore() {
-  const HOST = "http://localhost:";
-  const PORT = "9000";
+
+  const HOST="http://localhost:";
+  const PORT="9000";
   fetch(HOST + PORT + "/readAndSaveToFile")
     .then((res) => res.text())
     .then((res) => {
@@ -47,7 +48,6 @@ function restore() {
         localStorage.removeItem("reload");
       }
     });
-  window.location.reload(true);
 }
 
 export default restore;

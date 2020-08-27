@@ -12,10 +12,7 @@
 import * as Blockly from "blockly/core";
 import saveToFile from "../fileHandlers/saveToFile";
 import generateCodeArrayForTemplate from "../helperFunctions/generateCodeArrayForTemplate";
-import {
-  getSurfaceFormsFromList,
-  generateAllSurfaceFormsForTemplate,
-} from "../helperFunctions/getSurfaceForms";
+import {getSurfaceFormsFromList,generateAllSurfaceFormsForTemplate} from "../helperFunctions/getSurfaceForms";
 import getTypes from "../helperFunctions/getTypes";
 
 function saveTemplate(block, name) {
@@ -33,9 +30,7 @@ function saveTemplate(block, name) {
     templates = {};
   }
   templates[types] = { surfaceForms: "", code: "" };
-  templates[types]["surfaceForms"] = generateAllSurfaceFormsForTemplate(
-    allBlocks
-  );
+  templates[types]["surfaceForms"] = generateAllSurfaceFormsForTemplate(allBlocks);
   templates[types]["code"] = generateCodeArrayForTemplate(allBlocks);
   localStorage.setItem("templates", JSON.stringify(templates));
   saveToFile();

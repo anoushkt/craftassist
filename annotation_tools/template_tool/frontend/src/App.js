@@ -12,21 +12,18 @@
 import React from "react";
 import "./App.css";
 import "blockly/blocks";
-import "./block/random";
-import "./block/textBlock";
-import "./block/parent";
+import "./block/customBlock";
 import restore from "./fileHandlers/readFromFile";
 import Button from "@material-ui/core/Button";
+import Select from "@material-ui/core/Select";
+import $ from "jquery";
 import filterFunction from "./dropdownFunctions/filterFunction";
 import searchForBlocks from "./dropdownFunctions/searcher";
 import highlightSelectedText from "./highlightSelectedText";
 import getCodeForBlocks from "./codeGenerator/getCodeForBlocks";
 import BlocklyComponent, { Block, Value, Field, Shadow } from "./Blockly";
-import { Container, Row, Col } from "react-grid-system";
-import saveChanges from "./saveChanges";
-import BlocklyJS from "blockly/javascript";
 
-const alphaSort = require("alpha-sort");
+import BlocklyJS from "blockly/javascript";
 
 var spans = localStorage.getItem("spans");
 if (spans) {
@@ -42,15 +39,15 @@ class App extends React.Component {
     super(props);
     this.simpleWorkspace = React.createRef();
   }
-  //componentDidMount() {
-  //restore();
-  // }
+  componentDidMount() {
+    restore();
+  }
 
   generateCode = () => {
     // clear the boxes to hold generations
     clear();
     var numberOfGenerations = document.getElementById("numberOfGen").value;
-    if (!numberOfGenerations) {
+    if (!numberOfGenerations){
       // no input has been provided, default to 1 generation
       numberOfGenerations = 1;
     }
@@ -65,6 +62,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
+          <p> Blockly based template generator</p>
           <BlocklyComponent
             ref={this.simpleWorkspace}
             readOnly={false}
@@ -76,117 +74,53 @@ class App extends React.Component {
               wheel: true,
             }}
           >
-            <Block type="random" />
-            <Block type="parent" />
-            <Block type="textBlock" />
+            <Block type="customBlock" />
           </BlocklyComponent>
         </header>
 
-        <Container id="searchBar">
-          <Row>
-            <Col
-              sm={3}
-              id="searchInput"
-              contentEditable="true"
-              onKeyUp={filterFunction}
-              placeholder="Search for blocks.."
-            ></Col>
-          </Row>
-          <Row>
-            <ul id="UL">{listItems}</ul>
-          </Row>
-        </Container>
+        <div id="logicalAndSurfaceForms">
+          <h4 id="dropdownHeading">Blocks</h4>
 
-        <div id="containersForText">
-          <Row>
-            <Col sm={3} offset={{ md: 1 }}>
-              {" "}
-              Surface forms{" "}
-            </Col>
-            <Col sm={3} offset={{ md: 1 }}>
-              {" "}
-              Enter logical forms{" "}
-            </Col>
-          </Row>
+          <h4 id="heading1"> surface forms</h4>
+          <div id="surfaceForms" contentEditable="true"></div>
+          <h4 id="heading2"> Action dictionary-surface forms</h4>
+          <pre id="actionDict" contentEditable="true"></pre>
 
-          <Row>
-            <Col
-              sm={3}
-              id="surfaceForms"
-              contentEditable="true"
-              offset={{ md: 1 }}
-            ></Col>
-            <Col sm={6} offset={{ md: 1 }}>
-              <pre id="actionDict" contentEditable="true"></pre>
-            </Col>
-          </Row>
-        </div>
+          <div
+            id="searchInput"
+            contentEditable="true"
+            onKeyUp={filterFunction}
+            placeholder="Search for blocks.."
+          ></div>
+          <ul id="UL">{listItems}</ul>
+          <Button
+            id="highlight"
+            variant="contained"
+            color="primary"
+            onClick={highlightSelectedText}
+          >
+            Highlight
+          </Button>
+          <input type="color" id="colors"></input>
+          <Button
+            id="generator"
+            variant="contained"
+            color="primary"
+            onClick={this.generateCode}
+          >
+            Generate code
+          </Button>
 
-        <div id="buttons">
-          <Row>
-            <Col sm={1}>
-              <Button
-                id="highlight"
-                variant="contained"
-                color="primary"
-                onClick={highlightSelectedText}
-              >
-                Highlight
-              </Button>
-            </Col>
+          <input id="numberOfGen" placeholder="Number of generations"></input>
 
-            <Col sm={1}>
-              <Button
-                id="saveChanges"
-                variant="contained"
-                color="primary"
-                onClick={saveChanges}
-              >
-                Save changes
-              </Button>
-            </Col>
-            <Col sm={1}>
-              <Button
-                id="generator"
-                variant="contained"
-                color="primary"
-                onClick={this.generateCode}
-              >
-                Generate code
-              </Button>
-
-              <input
-                id="numberOfGen"
-                placeholder="Number of generations"
-              ></input>
-            </Col>
-            <Col sm={1}>
-              <Button
-                id="clear"
-                variant="contained"
-                color="primary"
-                onClick={clear}
-              >
-                Clear boxes
-              </Button>
-            </Col>
-
-            <Col sm={1}>
-              <Button
-                id="restorer"
-                variant="contained"
-                color="primary"
-                onClick={restore}
-              >
-                Restore
-              </Button>
-            </Col>
-          </Row>
-        </div>
-
-        <div>
-          <div id="codeHeading">Generated surface-logical forms</div>
-          <pre id="generatedCode" contentEditable="true"></pre>
+          <Button
+            id="clear"
+            variant="contained"
+            color="primary"
+            onClick={clear}
+          >
+            Clear boxes
+          </Button>
         </div>
       </div>
     );
@@ -199,7 +133,7 @@ var textList = localStorage.getItem("blocks");
 var text;
 if (textList) {
   // the dropdown has been populated
-  text = JSON.parse(textList).sort(alphaSort.ascending);
+  text = JSON.parse(textList);
 } else {
   // the dropdown has only the default element
   text = ["Custom block"];
@@ -223,6 +157,4 @@ var listItems = text.map((str) => (
 function clear() {
   document.getElementById("surfaceForms").innerText = "";
   document.getElementById("actionDict").innerText = "";
-
-  document.getElementById("generatedCode").innerText = "";
 }
