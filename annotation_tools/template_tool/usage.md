@@ -112,5 +112,5 @@ A template is a collection of template objects connected together. It is also a 
 
 ## Dictionary specs
 
-For placeholders (eg: for spans and categoricals), use "".
+For placeholders for spans, use "".
 
