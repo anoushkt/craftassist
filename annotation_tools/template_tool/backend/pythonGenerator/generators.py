@@ -1,13 +1,12 @@
-#!/bin/env python
-from nested_lookup import *
-from deepmerge import always_merger
 import random
+import json
+from nested_lookup import nested_update
+from nested_lookup import nested_lookup
+from deepmerge import always_merger
 
-spans={"5 steps":"5","10 steps":"10","20 steps":"20","of size 19":"19","of size 10":"10","of size 20":"20"}
-surfaceForms=[["5 steps","10 steps","20 steps"],["of size 19","of size 10"]]
-code=[{"location":{"steps":" "}}, {"location":{"has_size":" "}}]
-
-info={"code":code, "surfaceForms":surfaceForms, "spans":spans}
+path = './../templates.txt'
+data_file = open(path,'r')
+data_read=json.loads(data_file.read())
 
 def iter_paths(d):
     def iter1(d, path):
@@ -19,7 +18,7 @@ def iter_paths(d):
         return paths
     return iter1(d, [])
 
-spanPaths=[
+span_paths=[
   "block_type",
   "steps",
   "has_measure",
@@ -50,19 +49,19 @@ spanPaths=[
   "ordinal",
 ]
 
-def setSpan(code, surfaceForm, spanValue):
+def set_span(code, surface_form, span_value):
 
-    spanArray=spanValue.split(" ")
-    surfaceFormWords=surfaceForm.split(" ")
-    startSpan=surfaceFormWords.index(spanArray[0])
-    endSpan=startSpan+len(spanArray)-1
-    span=[0,[startSpan,endSpan]]
-    for spans in spanPaths:
+    span_array=span_value.split(" ")
+    surface_form_words=surface_form.split(" ")
+    start_span=surface_form_words.index(span_array[0])
+    end_span=start_span+len(span_array)-1
+    span=[0,[start_span,end_span]]
+    for spans in span_paths:
         code=nested_update(code, key=spans, value=span)
     return code
 
 # Using the generator pattern (an iterable)
-class generator(object):
+class Generator():
     def __init__(self,info):
         self.n = 1
         self.num = 0
@@ -76,71 +75,91 @@ class generator(object):
         return self.next()
 
     def __generate__(self):
-        generations=""
+        generations=[]
         while self.num<self.n:
-            generations+=self.next()+"\n"
+            generations.append(self.next())
             self.num+=1
+        print (generations)
         return generations
-    
+
     def next(self):
-        cur= self.getGeneration()
+        cur= self.get_generation()
         return cur
 
-    def getGeneration(self):
+    def get_generation(self):
         info2=self.info
-        return generateTemplate(info2)
+        return generate_template(info2)
 
 
 
-def generateTemplate(info):
-    surfaceForm=""
-    chosenSurfaceForms=[]
+def generate_template(info):
+    surface_form=""
+    chosen_surface_forms=[]
     #print(info)
     #print(info[surfaceForms])
     for target_list in info["surfaceForms"]:
-        chooseSurfaceForm=random.choice(target_list)
-        surfaceForm+=chooseSurfaceForm+" "
-        chosenSurfaceForms.append(chooseSurfaceForm)
-    for i in range(len(info["code"])):
-        curCode=info["code"][i]
-        spanValue=spans[chosenSurfaceForms[i]]
-        info["code"][i]=setSpan(curCode,surfaceForm,spanValue)
-    
+        if target_list:
+            choose_surface_form=random.choice(target_list)
+            surface_form+=choose_surface_form+" "
+            chosen_surface_forms.append(choose_surface_form)
+        else:
+            chosen_surface_forms.append("")
+    try:
+        for i in range(len(info["code"])):
+            cur_code=info["code"][i]
+            try:
+                span_value=spans[chosen_surface_forms[i]]
+            except:
+                span_value=chosen_surface_forms[i]
+            info["code"][i]=set_span(cur_code,surface_form,span_value)
+    except:
+        info["code"]={}
     #print(code)
-    dictionary=generateDictionary(info["code"])
-    print(dictionary)
-    return surfaceForm
+    dictionary=generate_dictionary(info["code"])
+    #print(dictionary)
+    return [surface_form,dictionary]
 
 
-def generateDictionary(code,i=0,skeletal={}):
+def generate_dictionary(code,i=0,skeletal={}):
     #print(code)
-    if(i==len(code)):
+    if i==len(code):
         return skeletal
 
     found=False
-    if(code[i]):
-        curCode=code[i]
+    if code[i]:
+        cur_code=code[i]
         paths=iter_paths(code[i])
-        key=curCode.keys()[0]
-        if(nested_lookup(curCode, code[i])):
+        key=cur_code.keys()[0]
+        if nested_lookup(cur_code, code[i]):
             found=True
-            curValue=nested_lookup(curCode,code[i])
-            newValue=always_merger.merge(curValue, curCode[key])
-            nested_update(curCode, key, newValue)
+            cur_value=nested_lookup(cur_code,code[i])
+            new_value=always_merger.merge(cur_value, cur_code[key])
+            nested_update(cur_code, key, new_value)
 
-        if(not found):
-            skeletal= always_merger.merge(skeletal, curCode)
+        if not found:
+            skeletal= always_merger.merge(skeletal, cur_code)
+    return generate_dictionary(code, i+1, skeletal)
 
-    
-    return generateDictionary(code, i+1, skeletal)
+arrayOfObjects=[]
+spans=data_read['spans']
+templatesSaved=data_read['templates']
+for template in templatesSaved:
+    templateContent=templatesSaved[template]
+    info={}
+    try:
+        info['code']=templateContent['code']
+        if not isinstance(info['code'], list):
+            info['code']=[info['code']]
+    except:
+        pass
+    #print(info['surfaceForms'])
+    info['spans']=spans
+    info['surfaceForms']=templateContent['surfaceForms']
+    if not isinstance(info['surfaceForms'][0], list):
+        info['surfaceForms']=[info['surfaceForms']]
+    #print(info)
+    arrayOfObjects.append(Generator(info))
 
-
-
-
-
-
-
-obj1=generator(info)
-print(obj1.__generate__())
-
-
+#16
+print(arrayOfObjects[16].info)
+arrayOfObjects[16].__generate__()

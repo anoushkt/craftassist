@@ -8,7 +8,7 @@ cd frontend
 npm install
 npm start
 ```
-This will spawn a ```localhost``` window. 
+This will spawn a ```localhost``` window.
 
 Open another terminal in the ``` template_tool ``` folder and do
 ```
@@ -18,6 +18,10 @@ npm start
 ```
 
 If either installation fails, do ``` npm rebuild```.
+
+The backend is serving the app on `localhost:9000` and the frontend on `localhost:3000` (by default). The frontend may be run on another port, but the backend must remain to be at `localhost:9000`.
+
+
 
 # Usage
 

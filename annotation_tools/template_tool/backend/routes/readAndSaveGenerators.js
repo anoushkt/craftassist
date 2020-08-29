@@ -15,25 +15,25 @@ var router = express.Router();
 
 router.get("/", function (req, res, next) {
 
-   if(fs.existsSync("templates.txt")){
+   if(fs.existsSync("./pythonGenerator/templates.py")){
       // the file exists
-     fs.readFile("templates.txt", function (err, data) {
+     fs.readFile("./pythonGenerator/templates.py", function (err, data) {
         // err is an error other than fileNotExists
         // we already checked for existence
        if(err) throw err
-       res.writeHead(200, { "Content-Type": "text/html" });
+       res.writeHead(200, { "Content-Type": "text/x-python" });
        res.write(data);
        return res.end();
       })};
     });
 
 router.post("/", function (req, res, next) {
+    console.log(req);
   console.log(req.body);
   
-  fs.writeFile("templates.txt", JSON.stringify(req.body), function (
+  fs.writeFile("templates.txt", req.body, function (
     err
   ) {
-
      // err is an error other than fileNotExists
     // if file does not exist, writeFile will create it
     if (err) throw err;

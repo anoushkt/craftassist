@@ -12,6 +12,7 @@
 import React from "react";
 import "./App.css";
 import "blockly/blocks";
+import saveGenerators from  "./fileHandlers/saveGenerators"
 import "./block/random";
 import "./block/textBlock";
 import "./block/parent";
