@@ -13,7 +13,7 @@ import * as Blockly from "blockly/core";
 import "blockly/javascript";
 import saveBlockCallback from "./rightClickCallbacks/saveBlockCallback";
 import tagBlockCallback from "./rightClickCallbacks/tagBlockCallback";
-
+import customInit from "./customInit"
 /**
  *
  * A custom block has a next connection, and a name field.
@@ -45,35 +45,3 @@ Blockly.JavaScript["parent"] = function (block) {
   return [JSON.stringify(code), Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-// Custom right click menu for the block. We add a saveBlock and tagBlock option.
-
-const customInit = (block) => {
-  const menuCustomizer = (menu) => {
-    const saveOption = {
-      text: "Save by name",
-      enabled: true,
-      callback: () => saveBlockCallback(block),
-    };
-    menu.push(saveOption);
-
-    const tagOption = {
-      text: "Save by tag",
-      enabled: true,
-      callback: () => tagBlockCallback(block),
-    };
-    menu.push(tagOption);
-
-    return menu;
-  };
-  block.customContextMenu = menuCustomizer;
-
-  /*block.select=function(){
-    Blockly.selected = this;
-    this.addSelect();
-    //window.alert(Blockly.selected);
-  
-  
-  //Blockly.fireUiEvent(this.workspace.getCanvas(), 'blocklySelectChange');
-
-  }*/
-};

@@ -196,14 +196,15 @@ function generateDictionary(allBlocks, code, i = 0, skeletal = {}) {
     });
 
     if (!found) {
-      var keys = Object.keys(skeletal)[0];
+     /* var keys = Object.keys(skeletal)[0];
       if (keys) {
         console.log(keys);
         skeletal[keys] = merge(skeletal[keys], finalCode);
-      } else {
+      } else {*/
+
         skeletal = merge(skeletal, finalCode);
       }
-    }
+    
 
   }
 

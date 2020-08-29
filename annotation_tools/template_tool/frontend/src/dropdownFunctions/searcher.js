@@ -13,7 +13,7 @@ import Blockly, { Generator } from "blockly/core";
 import $ from "jquery";
 function searchForBlocks() {
   // add a default block to toolbox
-  document.getElementById("toolBox").innerHTML = ``;
+ // document.getElementById("toolBox").innerHTML = ``;
   Blockly.mainWorkspace.updateToolbox(document.getElementById("toolBox"));
 
   // name/tag the user wants
@@ -25,6 +25,7 @@ function searchForBlocks() {
     <block xmlns="https://developers.google.com/blockly/xml" type="parent"></block>
     <block xmlns="https://developers.google.com/blockly/xml" type="textBlock"></block>`;
     Blockly.mainWorkspace.updateToolbox(document.getElementById("toolBox"));
+  
     return;
   }
 
