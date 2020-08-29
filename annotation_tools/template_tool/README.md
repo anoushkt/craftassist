@@ -23,6 +23,8 @@ If either installation fails, do ``` npm rebuild```.
 
 For instructions on using the tool, refer to [usage doc](./usage.md)
 
+For developer instructions, refer to [developer doc](./developers.md)
+
 ## License
 
 CraftAssist is [MIT licensed](./LICENSE).

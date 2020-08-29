@@ -1,3 +1,4 @@
+# Adding blocks
 To add blocks to the toolbar, refer to 
 
 1. Use [block factory](https://blockly-demo.appspot.com/static/demos/blockfactory/index.html) to create new blocks. 
