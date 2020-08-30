@@ -6,28 +6,29 @@
  */
 
 /**
- * @fileoverview This file defines the main Blockly component and basic layout of the template generator.
+ * @fileoverview This file defines the main Blockly component
+ * and basic layout of the template generator.
  */
 
-import React from "react";
-import "./App.css";
-import "blockly/blocks";
-import "./block/random";
-import "./block/textBlock";
-import "./block/parent";
-import restore from "./fileHandlers/readFromFile";
-import Button from "@material-ui/core/Button";
-import filterFunction from "./dropdownFunctions/filterFunction";
-import searchForBlocks from "./dropdownFunctions/searcher";
-import highlightSelectedText from "./highlightSelectedText";
-import getCodeForBlocks from "./codeGenerator/getCodeForBlocks";
-import BlocklyComponent, { Block } from "./Blockly";
-import { Container, Row, Col } from "react-grid-system";
-import saveChanges from "./saveChanges";
+import React from 'react';
+import './App.css';
+import 'blockly/blocks';
+import './block/random';
+import './block/textBlock';
+import './block/parent';
+import restore from './fileHandlers/readFromFile';
+import Button from '@material-ui/core/Button';
+import filterFunction from './dropdownFunctions/filterFunction';
+import searchForBlocks from './dropdownFunctions/searcher';
+import highlightSelectedText from './highlightSelectedText';
+import getCodeForBlocks from './codeGenerator/getCodeForBlocks';
+import BlocklyComponent, {Block} from './Blockly';
+import {Container, Row, Col} from 'react-grid-system';
+import saveChanges from './saveChanges';
 
-const alphaSort = require("alpha-sort");
+const alphaSort = require('alpha-sort');
 
-var spans = localStorage.getItem("spans");
+const spans = localStorage.getItem('spans');
 if (spans) {
   // saved information about spans exists
   window.spans = JSON.parse(spans);
@@ -36,29 +37,29 @@ if (spans) {
   window.spans = {};
 }
 
+/**
+ * This is the main class that contains the template tool.
+ */
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.simpleWorkspace = React.createRef();
   }
-  //componentDidMount() {
-  //restore();
-  // }
 
-  generateCode = () => {
+  generateCode() {
     // clear the boxes to hold generations
     clear();
-    var numberOfGenerations = document.getElementById("numberOfGen").value;
+    let numberOfGenerations = document.getElementById('numberOfGen').value;
     if (!numberOfGenerations) {
       // no input has been provided, default to 1 generation
       numberOfGenerations = 1;
     }
-    var i = 0;
+    let i = 0;
     while (i < numberOfGenerations) {
       i++;
       getCodeForBlocks();
     }
-  };
+  }
 
   render() {
     return (
@@ -68,7 +69,7 @@ class App extends React.Component {
             ref={this.simpleWorkspace}
             readOnly={false}
             trashcan={true}
-            media={"media/"}
+            media={'media/'}
             move={{
               scrollbars: true,
               drag: true,
@@ -98,13 +99,13 @@ class App extends React.Component {
 
         <div id="containersForText">
           <Row>
-            <Col sm={3} offset={{ md: 1 }}>
-              {" "}
-              Surface forms{" "}
+            <Col sm={3} offset={{md: 1}}>
+              {' '}
+              Surface forms{' '}
             </Col>
-            <Col sm={3} offset={{ md: 1 }}>
-              {" "}
-              Enter logical forms{" "}
+            <Col sm={3} offset={{md: 1}}>
+              {' '}
+              Enter logical forms{' '}
             </Col>
           </Row>
 
@@ -113,9 +114,9 @@ class App extends React.Component {
               sm={3}
               id="surfaceForms"
               contentEditable="true"
-              offset={{ md: 1 }}
+              offset={{md: 1}}
             ></Col>
-            <Col sm={6} offset={{ md: 1 }}>
+            <Col sm={6} offset={{md: 1}}>
               <pre id="actionDict" contentEditable="true"></pre>
             </Col>
           </Row>
@@ -194,22 +195,22 @@ class App extends React.Component {
 
 export default App;
 
-var textList = localStorage.getItem("blocks");
-var text;
+const textList = localStorage.getItem('blocks');
+let text;
 if (textList) {
   // the dropdown has been populated
   text = JSON.parse(textList).sort(alphaSort.ascending);
 } else {
   // the dropdown has only the default element
-  text = ["Custom block"];
-  localStorage.setItem("blocks", JSON.stringify(text));
+  text = ['Custom block'];
+  localStorage.setItem('blocks', JSON.stringify(text));
 }
-var listItems = text.map((str) => (
+const listItems = text.map((str) => (
   // map each string to a list element
   <li>
     <a
       onClick={() => {
-        document.getElementById("searchInput").innerText = str;
+        document.getElementById('searchInput').innerText = str;
         searchForBlocks();
       }}
     >
@@ -220,7 +221,7 @@ var listItems = text.map((str) => (
 
 // This function clears the data holding boxes
 function clear() {
-  document.getElementById("surfaceForms").innerText = "";
-  document.getElementById("actionDict").innerText = "";
-  document.getElementById("generatedCode").innerText = "";
+  document.getElementById('surfaceForms').innerText = '';
+  document.getElementById('actionDict').innerText = '';
+  document.getElementById('generatedCode').innerText = '';
 }

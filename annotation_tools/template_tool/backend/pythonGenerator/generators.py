@@ -120,18 +120,25 @@ def generate_template(info):
 def generate_dictionary(code, i=0, skeletal=None):
     """ This function generates the action dictionary given an array
     of action dictionaries """
+    print(i)
+    print(skeletal)
     if skeletal is None:
         skeletal = {}
     if i == len(code):
         return skeletal
+    print(code[i])
     found = False
     if code[i]:
         cur_code = code[i]
         key = cur_code.keys()[0]
         if nested_lookup(key, skeletal):
+            # the parent key exists
+            print("here")
             found = True
-            cur_value = nested_lookup(key, code[i])
+            cur_value = nested_lookup(key, skeletal)[0]
+            print(cur_value)
             new_value = always_merger.merge(cur_value, cur_code[key])
+            print(new_value)
             nested_update(skeletal, key, new_value)
         if not found:
             skeletal = always_merger.merge(skeletal, cur_code)
@@ -158,5 +165,6 @@ for template in templatesSaved:
     arrayOfObjects.append(Generator(info))
 
 
+# arrayOfObjects[2].__generate__()
 for obj in arrayOfObjects:
     obj.__generate__()

@@ -55,7 +55,7 @@ Used to generate logical and surface forms for a template or template object.
 
 3. Write the surface forms to be associated with this template object in the box labelled `surface forms`. Each surface form must be newline separated.
 
-4. Write a single logical form in the box labelled `Enter logical forms`.
+4. Write a single logical form in the box labelled `Enter logical forms`. It must not contain single quotes.
 
 5. Right click on the block and choose `save by name`. The block is now available in the search box. The name must not contain spaces.
 
@@ -115,9 +115,10 @@ For placeholders for spans, use "".
 2. The generator automatically reads templates saved using the tool.
 
 3. To run the generator, go to the `template_tool` folder and do
- ```
-    cd backend/pythonGenerator
-    python -m pip install nested_lookup
-    python -m pip install deepmerge
-    python generators.py
- ```
+
+```
+   cd backend/pythonGenerator
+   python -m pip install nested_lookup
+   python -m pip install deepmerge
+   python generators.py
+```

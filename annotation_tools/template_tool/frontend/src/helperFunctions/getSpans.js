@@ -10,12 +10,17 @@
  * associated with surface forms
  */
 
+/**
+ *
+ * @param {array} surfaceForms The surface forms to provide spans for
+ * @return {array} an array of the associated spans
+ */
 function getSpans(surfaceForms) {
   console.log(surfaceForms);
-  var spans = [];
-  for (var i = 0; i < surfaceForms.length; i++) {
-    var surfaceForm = surfaceForms[i];
-    var span = window.spans[surfaceForm];
+  const spans = [];
+  for (let i = 0; i < surfaceForms.length; i++) {
+    const surfaceForm = surfaceForms[i];
+    let span = window.spans[surfaceForm];
     if (!span) {
       // the entire surface form is the span
       span = surfaceForm;

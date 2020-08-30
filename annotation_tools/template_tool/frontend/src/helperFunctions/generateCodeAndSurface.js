@@ -6,13 +6,18 @@
  */
 
 /**
- * @fileoverview This file defines a function to return an array of the codes associated with each template object of a template.
+ * @fileoverview This file defines a function to return an array of the
+ * surface and logical forms associated with each template object of a template.
  */
 
+/**
+ * This function returns the logical and surface form array
+ * associated with a list of blocks/ a template
+*/
 function generateCodeAndSurfaceForm(blocks) {
-  var codeList = [];
-  var surfaceForms = [];
-  var templates = localStorage.getItem("templates");
+  const codeList = [];
+  const surfaceForms = [];
+  let templates = localStorage.getItem('templates');
 
   if (templates) {
     // template information exists
@@ -24,22 +29,22 @@ function generateCodeAndSurfaceForm(blocks) {
 
   blocks.forEach((element) => {
     // push code for this element
-    //const parent=element.getFieldValue("parent");
-    if (element.type != "random") {
-      const curCode = templates[element.getFieldValue("name")]["code"];
+    // const parent=element.getFieldValue("parent");
+    if (element.type != 'random') {
+      const curCode = templates[element.getFieldValue('name')]['code'];
       codeList.push(curCode);
-      var surfaceForm =
-        templates[element.getFieldValue("name")]["surfaceForms"];
+      let surfaceForm =
+        templates[element.getFieldValue('name')]['surfaceForms'];
       surfaceForm = randomFromList(surfaceForm);
       surfaceForms.push(surfaceForm);
     } else {
       const randomChoices = element
-        .getFieldValue("randomCategories")
-        .split(", ");
+          .getFieldValue('randomCategories')
+          .split(', ');
       const choice = randomFromList(randomChoices);
-      const curCode = templates[choice]["code"];
+      const curCode = templates[choice]['code'];
       codeList.push(curCode);
-      var surfaceForm = templates[choice]["surfaceForms"];
+      let surfaceForm = templates[choice]['surfaceForms'];
       surfaceForm = randomFromList(surfaceForm);
       surfaceForms.push(surfaceForm);
     }
@@ -49,8 +54,11 @@ function generateCodeAndSurfaceForm(blocks) {
 }
 export default generateCodeAndSurfaceForm;
 
+/**
+ * This function returns a random element from a list
+ */
 function randomFromList(list) {
-  var number_length = list.length;
-  var x = Math.floor(Math.random() * number_length);
+  const numberLength = list.length;
+  const x = Math.floor(Math.random() * numberLength);
   return list[x];
 }

@@ -6,29 +6,32 @@
  */
 
 /**
- * @fileoverview This file contains the callback function for the "saveBlock" option that the custom block has. This saves information about the block to local storage and the template library file.
+ * @fileoverview This file contains the callback function for the "saveBlock"
+ * option that the custom block has. This saves information about the block to
+ * local storage and the template library file.
  */
 
-import $ from "jquery";
-import saveTemplateObject from "../../saveToLocalStorage/saveTemplateObject";
-import * as Blockly from "blockly/core";
-import saveTemplate from "../../saveToLocalStorage/saveTemplate";
-import saveRandomTemplateObject from "../../saveToLocalStorage/saveRandom";
+import saveTemplateObject from '../../saveToLocalStorage/saveTemplateObject';
+import * as Blockly from 'blockly/core';
+import saveTemplate from '../../saveToLocalStorage/saveTemplate';
+import saveRandomTemplateObject from '../../saveToLocalStorage/saveRandom';
 function saveBlockCallback(block) {
-  var blockAsText = Blockly.Xml.domToText(Blockly.Xml.blockToDom(block, true));
+  const blockAsText = Blockly.Xml.domToText(
+      Blockly.Xml.blockToDom(block, true),
+  );
 
   // wrap the block in xml tags
-  var fullBlockXML = `<xml xmlns="https://developers.google.com/blockly/xml">${blockAsText}</xml>`;
-  var name = block.getFieldValue("name");
-  var allBlocks = Blockly.mainWorkspace.getAllBlocks();
+  const fullBlockXML = `<xml xmlns="https://developers.google.com/blockly/xml">${blockAsText}</xml>`;
+  let name = block.getFieldValue('name');
+  const allBlocks = Blockly.mainWorkspace.getAllBlocks();
   if (allBlocks.length != 1) {
     // not a single template object
-    name = window.prompt("Enter a name for the template");
+    name = window.prompt('Enter a name for the template');
   }
 
   // get the blocks currently saved by name
-  var currentSavedInfoString = localStorage.getItem("savedByName");
-  var currentSavedInfo;
+  const currentSavedInfoString = localStorage.getItem('savedByName');
+  let currentSavedInfo;
 
   if (currentSavedInfoString) {
     // blocks have already been saved
@@ -41,19 +44,19 @@ function saveBlockCallback(block) {
   // save this block
   currentSavedInfo[name] = fullBlockXML;
 
-  localStorage.setItem("savedByName", JSON.stringify(currentSavedInfo));
+  localStorage.setItem('savedByName', JSON.stringify(currentSavedInfo));
 
-  var currentDropdownInfo = JSON.parse(localStorage.getItem("blocks"));
+  const currentDropdownInfo = JSON.parse(localStorage.getItem('blocks'));
   if (!currentDropdownInfo.includes(name)) {
     currentDropdownInfo.push(name);
   }
 
-  localStorage.setItem("blocks", JSON.stringify(currentDropdownInfo));
+  localStorage.setItem('blocks', JSON.stringify(currentDropdownInfo));
 
   // wrap the block name in option tags
   if (allBlocks.length == 1) {
     // it is a template object
-    if (allBlocks[0].type == "random") {
+    if (allBlocks[0].type == 'random') {
       saveRandomTemplateObject(block, name);
     } else {
       saveTemplateObject(block, name);
@@ -66,8 +69,8 @@ function saveBlockCallback(block) {
   window.location.reload(true);
 
   Blockly.Xml.DomToWorkspace(
-    Blockly.Xml.blockToDom(block, true),
-    Blockly.mainWorkspace
+      Blockly.Xml.blockToDom(block, true),
+      Blockly.mainWorkspace,
   );
   console.log(Blockly.mainWorkspace.getAllBlocks());
 }

@@ -6,49 +6,48 @@
  */
 
 /**
- * @fileoverview This file contains the definition of a function to dump the information in local storage to a file, by making a request to the backend.
+ * @fileoverview This file contains the definition of a
+ * function to dump the information in local storage to a file,
+ * by making a request to the backend.
  */
 
 function saveToFile() {
   // dump the current local storage information to a file
-  var toSave = {};
-  var spans = localStorage.getItem("spans");
-  var savedBlocks = localStorage.getItem("savedByName");
-
-  var savedByTag = localStorage.getItem("tags");
-
-  var templates = localStorage.getItem("templates");
-
-  var blocksInDropdown = localStorage.getItem("blocks");
+  const toSave = {};
+  const spans = localStorage.getItem('spans');
+  const savedBlocks = localStorage.getItem('savedByName');
+  const savedByTag = localStorage.getItem('tags');
+  const templates = localStorage.getItem('templates');
+  const blocksInDropdown = localStorage.getItem('blocks');
 
   if (savedBlocks) {
-    toSave["savedBlocks"] = JSON.parse(savedBlocks);
+    toSave['savedBlocks'] = JSON.parse(savedBlocks);
   }
 
   if (spans) {
-    toSave["spans"] = JSON.parse(spans);
+    toSave['spans'] = JSON.parse(spans);
   }
   if (savedByTag) {
-    toSave["savedByTag"] = JSON.parse(savedByTag);
+    toSave['savedByTag'] = JSON.parse(savedByTag);
   }
   if (templates) {
-    toSave["templates"] = JSON.parse(templates);
+    toSave['templates'] = JSON.parse(templates);
   }
   if (blocksInDropdown) {
-    toSave["blocks"] = JSON.parse(blocksInDropdown);
+    toSave['blocks'] = JSON.parse(blocksInDropdown);
   }
   // request the backend to save this information
   callAPI(toSave);
 }
 
 function callAPI(data) {
-  const HOST = "http://localhost:";
-  const PORT = "9000";
-  fetch(HOST + PORT + "/readAndSaveToFile", {
-    method: "POST",
+  const HOST = 'http://localhost:';
+  const PORT = '9000';
+  fetch(HOST + PORT + '/readAndSaveToFile', {
+    method: 'POST',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
     },
 
     body: JSON.stringify(data),
