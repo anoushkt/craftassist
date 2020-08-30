@@ -13,16 +13,13 @@ import $ from "jquery";
 import saveTemplateObject from "../../saveToLocalStorage/saveTemplateObject";
 import * as Blockly from "blockly/core";
 import saveTemplate from "../../saveToLocalStorage/saveTemplate";
-
+import saveRandomTemplateObject from "../../saveToLocalStorage/saveRandom";
 function saveBlockCallback(block) {
   var blockAsText = Blockly.Xml.domToText(Blockly.Xml.blockToDom(block, true));
 
   // wrap the block in xml tags
   var fullBlockXML = `<xml xmlns="https://developers.google.com/blockly/xml">${blockAsText}</xml>`;
-  var name;
-  if (block.type == "random") {
-    name = window.prompt("Enter name");
-  } else name = block.getFieldValue("name");
+  var name = block.getFieldValue("name");
   var allBlocks = Blockly.mainWorkspace.getAllBlocks();
   if (allBlocks.length != 1) {
     // not a single template object
@@ -56,7 +53,11 @@ function saveBlockCallback(block) {
   // wrap the block name in option tags
   if (allBlocks.length == 1) {
     // it is a template object
-    saveTemplateObject(block, name);
+    if (allBlocks[0].type == "random") {
+      saveRandomTemplateObject(block, name);
+    } else {
+      saveTemplateObject(block, name);
+    }
   } else {
     saveTemplate(block, name);
   }

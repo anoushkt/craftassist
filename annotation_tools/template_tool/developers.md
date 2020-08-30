@@ -9,5 +9,3 @@
 ## Adding blocks
 
 For instructions on adding new blocks, refer to [adding blocks](./developerFiles/addingBlocks.md)
-
-

@@ -1,6 +1,6 @@
 # Code generation
 
-All code generation is in `frontend/src/codeGenerator/getCodeForBlocks.js`. 
+All code generation is in `frontend/src/codeGenerator/getCodeForBlocks.js`.
 
 To add new span values, add the name of the key to the `spanPaths` variable.
 

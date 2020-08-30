@@ -1,11 +1,13 @@
 import * as Blockly from "blockly/core";
 import "blockly/javascript";
-import customInit from "./customInit"
+import customInit from "./customInit";
 
 Blockly.Blocks["random"] = {
   init: function () {
     this.appendValueInput("next")
       .setCheck(null)
+      .appendField(new Blockly.FieldTextInput("name"), "name")
+      .appendField("-")
       .appendField("random over")
       .appendField(new Blockly.FieldTextInput("default"), "randomCategories");
     this.setOutput(true, null);

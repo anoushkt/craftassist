@@ -12,7 +12,6 @@
 import React from "react";
 import "./App.css";
 import "blockly/blocks";
-import saveGenerators from  "./fileHandlers/saveGenerators"
 import "./block/random";
 import "./block/textBlock";
 import "./block/parent";
@@ -22,10 +21,9 @@ import filterFunction from "./dropdownFunctions/filterFunction";
 import searchForBlocks from "./dropdownFunctions/searcher";
 import highlightSelectedText from "./highlightSelectedText";
 import getCodeForBlocks from "./codeGenerator/getCodeForBlocks";
-import BlocklyComponent, { Block, Value, Field, Shadow } from "./Blockly";
+import BlocklyComponent, { Block } from "./Blockly";
 import { Container, Row, Col } from "react-grid-system";
 import saveChanges from "./saveChanges";
-import BlocklyJS from "blockly/javascript";
 
 const alphaSort = require("alpha-sort");
 
@@ -224,6 +222,5 @@ var listItems = text.map((str) => (
 function clear() {
   document.getElementById("surfaceForms").innerText = "";
   document.getElementById("actionDict").innerText = "";
-
   document.getElementById("generatedCode").innerText = "";
 }

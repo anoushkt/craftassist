@@ -11,7 +11,7 @@
 
 import * as Blockly from "blockly/core";
 import "blockly/javascript";
-import customInit from "./customInit"
+import customInit from "./customInit";
 
 /**
  *
@@ -55,4 +55,3 @@ Blockly.JavaScript["textBlock"] = function (block) {
 
   return [JSON.stringify(code), Blockly.JavaScript.ORDER_ATOMIC];
 };
-

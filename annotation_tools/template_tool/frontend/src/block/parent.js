@@ -13,7 +13,7 @@ import * as Blockly from "blockly/core";
 import "blockly/javascript";
 import saveBlockCallback from "./rightClickCallbacks/saveBlockCallback";
 import tagBlockCallback from "./rightClickCallbacks/tagBlockCallback";
-import customInit from "./customInit"
+import customInit from "./customInit";
 /**
  *
  * A custom block has a next connection, and a name field.
@@ -44,4 +44,3 @@ Blockly.JavaScript["parent"] = function (block) {
 
   return [JSON.stringify(code), Blockly.JavaScript.ORDER_ATOMIC];
 };
-

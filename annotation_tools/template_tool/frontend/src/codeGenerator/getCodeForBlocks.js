@@ -10,7 +10,6 @@
  */
 
 import * as Blockly from "blockly/core";
-import { getSurfaceForms } from "../helperFunctions/getSurfaceForms";
 import getSpans from "../helperFunctions/getSpans";
 import getTypes from "../helperFunctions/getTypes";
 import generateCodeAndSurfaceForm from "../helperFunctions/generateCodeAndSurface";
@@ -150,7 +149,10 @@ function getCodeForBlocks() {
     surfaceForm + "     " + JSON.stringify(skeletal, null, 2) + "\n";
 
   document.getElementById("surfaceForms").innerText += surfaceForm + "\n";
-  localStorage.setItem("current", document.getElementById("surfaceForms").innerText);
+  localStorage.setItem(
+    "current",
+    document.getElementById("surfaceForms").innerText
+  );
 }
 
 export default getCodeForBlocks;
@@ -173,7 +175,7 @@ function generateDictionary(allBlocks, code, i = 0, skeletal = {}) {
     var finalCode = curCode;
     var parent = "";
     var parentBlockConnection = allBlocks[i].parentBlock_;
-    
+
     if (parentBlockConnection) {
       parent = parentBlockConnection.getFieldValue("parent");
     }
@@ -196,8 +198,8 @@ function generateDictionary(allBlocks, code, i = 0, skeletal = {}) {
     });
 
     if (!found) {
-        skeletal = merge(skeletal, finalCode);
-      }
+      skeletal = merge(skeletal, finalCode);
+    }
   }
 
   return generateDictionary(allBlocks, code, i + 1, skeletal);

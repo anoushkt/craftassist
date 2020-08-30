@@ -35,7 +35,7 @@ function generateCodeAndSurfaceForm(blocks) {
     } else {
       const randomChoices = element
         .getFieldValue("randomCategories")
-        .split(",");
+        .split(", ");
       const choice = randomFromList(randomChoices);
       const curCode = templates[choice]["code"];
       codeList.push(curCode);
@@ -51,7 +51,6 @@ export default generateCodeAndSurfaceForm;
 
 function randomFromList(list) {
   var number_length = list.length;
-  // Assemble JavaScript into code variable.
   var x = Math.floor(Math.random() * number_length);
   return list[x];
 }

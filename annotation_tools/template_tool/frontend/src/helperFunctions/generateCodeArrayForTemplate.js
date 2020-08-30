@@ -6,7 +6,8 @@
  */
 
 /**
- * @fileoverview This file defines a function to return an array of the codes associated with each template object of a template.
+ * @fileoverview This file defines a function to return an array of the codes
+ *  associated with each template object of a template.
  */
 
 function generateCodeArrayForTemplate(blocks) {
@@ -22,17 +23,7 @@ function generateCodeArrayForTemplate(blocks) {
   }
 
   blocks.forEach((element) => {
-    // push code for this element
-    //const parent=element.getFieldValue("parent");
     const curCode = templates[element.getFieldValue("name")]["code"];
-    /*var code=curCode;
-    if(code){
-      if(parent){
-        code={};
-        code[parent]=curCode;
-      }
-    }*/
-
     codeList.push(curCode);
   });
 
