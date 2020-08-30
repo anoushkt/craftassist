@@ -120,5 +120,4 @@ For placeholders for spans, use "".
     python -m pip install nested_lookup
     python -m pip install deepmerge
     python generators.py
-
  ```
