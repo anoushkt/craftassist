@@ -22,8 +22,8 @@ import filterFunction from './dropdownFunctions/filterFunction';
 import searchForBlocks from './dropdownFunctions/searcher';
 import highlightSelectedText from './highlightSelectedText';
 import getCodeForBlocks from './codeGenerator/getCodeForBlocks';
-import BlocklyComponent, {Block} from './Blockly';
-import {Container, Row, Col} from 'react-grid-system';
+import BlocklyComponent, { Block } from './Blockly';
+import { Container, Row, Col } from 'react-grid-system';
 import saveChanges from './saveChanges';
 
 const alphaSort = require('alpha-sort');
@@ -57,7 +57,8 @@ class App extends React.Component {
     let i = 0;
     while (i < numberOfGenerations) {
       i++;
-      getCodeForBlocks();
+      if (!getCodeForBlocks()) return;
+
     }
   }
 
@@ -99,11 +100,11 @@ class App extends React.Component {
 
         <div id="containersForText">
           <Row>
-            <Col sm={3} offset={{md: 1}}>
+            <Col sm={3} offset={{ md: 1 }}>
               {' '}
               Surface forms{' '}
             </Col>
-            <Col sm={3} offset={{md: 1}}>
+            <Col sm={3} offset={{ md: 1 }}>
               {' '}
               Enter logical forms{' '}
             </Col>
@@ -114,9 +115,9 @@ class App extends React.Component {
               sm={3}
               id="surfaceForms"
               contentEditable="true"
-              offset={{md: 1}}
+              offset={{ md: 1 }}
             ></Col>
-            <Col sm={6} offset={{md: 1}}>
+            <Col sm={6} offset={{ md: 1 }}>
               <pre id="actionDict" contentEditable="true"></pre>
             </Col>
           </Row>

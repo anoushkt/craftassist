@@ -40,6 +40,7 @@ span_paths = [
   "yaw_pitch",
   "coordinates_span",
   "ordinal",
+  "number"
 ]
 
 

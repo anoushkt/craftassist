@@ -48,6 +48,7 @@ const spanPaths = [
   'yaw_pitch',
   'coordinates_span',
   'ordinal',
+  'number'
 ];
 
 
@@ -112,11 +113,13 @@ function getCodeForBlocks() {
     }
   }
   let code; let surfaceForms;
+  if (!generateCodeAndSurfaceForm(allBlocks)) return false;
   [surfaceForms, code] = generateCodeAndSurfaceForm(allBlocks);
   const spans = getSpans(surfaceForms);
   let surfaceForm = surfaceForms.join(' ');
   const templatesString = localStorage.getItem('templates');
   if (templatesString) {
+    // refactors
     const templates = JSON.parse(templatesString);
     const types = getTypes(allBlocks).join(' ');
     if (templates[types]) {
@@ -134,11 +137,13 @@ function getCodeForBlocks() {
   for (let i = 0; i < code.length; i++) {
     const curCode = code[i];
     if (curCode) {
+      // merge current code into the template code
       const deepest = getDeepestkey(code[i]);
       const all = deepest.split('.');
       const latest = all[all.length - 1];
       console.log(latest);
       if (spanPaths.includes(latest)) {
+        // it is a span
         const spanCount = getSpanCount(spans, surfaceForm, i);
         nestedProperty.set(code[i], deepest, spanCount);
       }
@@ -150,13 +155,15 @@ function getCodeForBlocks() {
 
   document.getElementById('surfaceForms').innerText += surfaceForm + '\n';
   localStorage.setItem(
-      'current',
-      document.getElementById('surfaceForms').innerText,
+    'current',
+    document.getElementById('surfaceForms').innerText,
   );
 }
 
 export default getCodeForBlocks;
 
+
+// This function returns the span count of a span, given a surface form
 function getSpanCount(spans, surfaceForm, i) {
   const spanArray = spans[i].split(' ');
   const surfaceFormWords = surfaceForm.split(' ');
@@ -166,6 +173,7 @@ function getSpanCount(spans, surfaceForm, i) {
   return [0, span];
 }
 
+// This function generates the dictionary for a template
 function generateDictionary(allBlocks, code, i = 0, skeletal = {}) {
   if (i == allBlocks.length) {
     return skeletal;
@@ -189,16 +197,18 @@ function generateDictionary(allBlocks, code, i = 0, skeletal = {}) {
     let found = false;
     pathsCur.forEach((element) => {
       if (element[element.length - 1] == Object.keys(finalCode)[0]) {
+        // a subset of the current path exists in the skeletal dictionary
         found = true;
         const fullPath = element.join('.');
         const currentDict = nestedProperty.get(skeletal, fullPath);
         const newDict = merge(currentDict,
-            finalCode[Object.keys(finalCode)[0]]);
+          finalCode[Object.keys(finalCode)[0]]);
         nestedProperty.set(skeletal, fullPath, newDict);
       }
     });
 
     if (!found) {
+      // the current key doesn't exist
       skeletal = merge(skeletal, finalCode);
     }
   }

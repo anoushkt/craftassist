@@ -31,6 +31,9 @@ function generateCodeAndSurfaceForm(blocks) {
     // push code for this element
     // const parent=element.getFieldValue("parent");
     if (element.type != 'random') {
+      if (!templates[element.getFieldValue("name")]) {
+        return false;
+      }
       const curCode = templates[element.getFieldValue('name')]['code'];
       codeList.push(curCode);
       let surfaceForm =
@@ -39,9 +42,10 @@ function generateCodeAndSurfaceForm(blocks) {
       surfaceForms.push(surfaceForm);
     } else {
       const randomChoices = element
-          .getFieldValue('randomCategories')
-          .split(', ');
+        .getFieldValue('randomCategories')
+        .split(', ');
       const choice = randomFromList(randomChoices);
+      if (!templates[choice]) return false;
       const curCode = templates[choice]['code'];
       codeList.push(curCode);
       let surfaceForm = templates[choice]['surfaceForms'];

@@ -17,7 +17,7 @@ import saveTemplate from '../../saveToLocalStorage/saveTemplate';
 import saveRandomTemplateObject from '../../saveToLocalStorage/saveRandom';
 function saveBlockCallback(block) {
   const blockAsText = Blockly.Xml.domToText(
-      Blockly.Xml.blockToDom(block, true),
+    Blockly.Xml.blockToDom(block, true),
   );
 
   // wrap the block in xml tags
@@ -69,8 +69,8 @@ function saveBlockCallback(block) {
   window.location.reload(true);
 
   Blockly.Xml.DomToWorkspace(
-      Blockly.Xml.blockToDom(block, true),
-      Blockly.mainWorkspace,
+    Blockly.Xml.blockToDom(block, true),
+    Blockly.mainWorkspace,
   );
   console.log(Blockly.mainWorkspace.getAllBlocks());
 }

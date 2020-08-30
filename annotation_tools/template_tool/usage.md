@@ -70,6 +70,8 @@ Used to generate logical and surface forms for a template or template object.
 
 3. To specify more levels, type in a "." seperated string in the editable text box.
 
+4. If two blocks don't have a parent they are at the same level.
+
 ### Creating templates
 
 1. Simply combine blocks to create templates by plugging them into each other.
