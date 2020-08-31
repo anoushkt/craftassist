@@ -185,10 +185,12 @@ function generateDictionary(allBlocks, code, i = 0, skeletal = {}) {
     const parentBlockConnection = allBlocks[i].parentBlock_;
 
     if (parentBlockConnection) {
+      // block has a parent
       parent = parentBlockConnection.getFieldValue('parent');
     }
 
     if (parent) {
+      // nest the block in the parent
       finalCode = {};
       nestedProperty.set(finalCode, parent, curCode);
     }
