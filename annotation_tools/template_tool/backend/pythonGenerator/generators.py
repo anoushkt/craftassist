@@ -11,6 +11,7 @@ path = './../templates.txt'
 data_file = open(path, 'r')
 data_read = json.loads(data_file.read())
 
+# keys where the value is to be replaced by a span index
 span_paths = [
   "block_type",
   "steps",
@@ -62,8 +63,12 @@ class Generator():
     using template information saved from the template interface """
 
     def __init__(self, information):
+
+        # change this to change the number of generations
         self.n = 1
         self.num = 0
+
+        # information about the template
         self.info = information
 
     def __iter__(self):
@@ -102,6 +107,7 @@ def generate_template(info):
             surface_form += choose_surface_form + " "
             chosen_surface_forms.append(choose_surface_form)
         else:
+            # no surface form associated with the template object
             chosen_surface_forms.append("")
     try:
         for i in range(len(info["code"])):
@@ -109,9 +115,12 @@ def generate_template(info):
             try:
                 span_value = spans[chosen_surface_forms[i]]
             except BaseException:
+                # no span value
                 span_value = chosen_surface_forms[i]
+            # set the span
             info["code"][i] = set_span(cur_code, surface_form, span_value)
     except BaseException:
+        # no logical form associated with the template object
         info["code"] = {}
     dictionary = {}
     dictionary = generate_dictionary(info["code"])
@@ -121,51 +130,50 @@ def generate_template(info):
 def generate_dictionary(code, i=0, skeletal=None):
     """ This function generates the action dictionary given an array
     of action dictionaries """
-    print(i)
-    print(skeletal)
     if skeletal is None:
         skeletal = {}
     if i == len(code):
+        # all action dictionaries have been merged
         return skeletal
-    print(code[i])
     found = False
     if code[i]:
         cur_code = code[i]
         key = cur_code.keys()[0]
         if nested_lookup(key, skeletal):
             # the parent key exists
-            print("here")
             found = True
             cur_value = nested_lookup(key, skeletal)[0]
-            print(cur_value)
             new_value = always_merger.merge(cur_value, cur_code[key])
-            print(new_value)
             nested_update(skeletal, key, new_value)
         if not found:
             skeletal = always_merger.merge(skeletal, cur_code)
     return generate_dictionary(code, i + 1, skeletal)
 
 
+# initialise an array of generators
 arrayOfObjects = []
 spans = data_read['spans']
 templatesSaved = data_read['templates']
 for template in templatesSaved:
     templateContent = templatesSaved[template]
     info = {}
-    try:
+    if ('code' in templateContent.keys()):
         info['code'] = templateContent['code']
         if not isinstance(info['code'], list):
+            # it is a template object
             info['code'] = [info['code']]
-    except BaseException:
-        pass
+    else:
+        # no code associated with the template
+        info['code'] = {}
     info['spans'] = spans
     info['surfaceForms'] = templateContent['surfaceForms']
+
     if not isinstance(info['surfaceForms'][0], list):
+        # it is a surface form
         info['surfaceForms'] = [info['surfaceForms']]
 
     arrayOfObjects.append(Generator(info))
 
-
-# arrayOfObjects[2].__generate__()
 for obj in arrayOfObjects:
+    # generate logical-surface form pair array for the template
     obj.__generate__()
