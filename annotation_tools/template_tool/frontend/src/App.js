@@ -57,7 +57,8 @@ class App extends React.Component {
     let i = 0;
     while (i < numberOfGenerations) {
       i++;
-      if (!getCodeForBlocks()) return;
+      var code = getCodeForBlocks();
+      if (code === false) return;
 
     }
   }
