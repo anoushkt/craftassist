@@ -104,24 +104,28 @@ function getDeepestkey(object) {
 function getCodeForBlocks() {
   const allBlocksInWorkspace = Blockly.mainWorkspace.getAllBlocks();
   const allBlocks = [];
+  
   for (let i = 0; i < allBlocksInWorkspace.length; i++) {
     if (
       allBlocksInWorkspace[i].type == 'textBlock' ||
       allBlocksInWorkspace[i].type == 'random'
     ) {
       allBlocks.push(allBlocksInWorkspace[i]);
+
     }
   }
-  let code; let surfaceForms;
+  let code; let surfaceForms; let allnewBlocks;
   if (!generateCodeAndSurfaceForm(allBlocks)) return false;
-  [surfaceForms, code] = generateCodeAndSurfaceForm(allBlocks);
+  [allnewBlocks, surfaceForms, code] = generateCodeAndSurfaceForm(allBlocks);
+  console.log("back to master");
+  console.log(allnewBlocks);
   const spans = getSpans(surfaceForms);
   let surfaceForm = surfaceForms.join(' ');
   const templatesString = localStorage.getItem('templates');
   if (templatesString) {
     // refactors
     const templates = JSON.parse(templatesString);
-    const types = getTypes(allBlocks).join(' ');
+    const types = getTypes(allnewBlocks).join(' ');
     if (templates[types]) {
       if (templates[types]['changes']) {
         const changes = templates[types]['changes'];
@@ -149,7 +153,7 @@ function getCodeForBlocks() {
       }
     }
   }
-  const skeletal = generateDictionary(allBlocks, code);
+  const skeletal = generateDictionary(allnewBlocks, code);
   document.getElementById('generatedCode').innerText +=
     surfaceForm + '     ' + JSON.stringify(skeletal, null, 2) + '\n';
 
@@ -173,6 +177,7 @@ function getSpanCount(spans, surfaceForm, i) {
   return [0, span];
 }
 
+    
 // This function generates the dictionary for a template
 function generateDictionary(allBlocks, code, i = 0, skeletal = {}) {
   if (i == allBlocks.length) {

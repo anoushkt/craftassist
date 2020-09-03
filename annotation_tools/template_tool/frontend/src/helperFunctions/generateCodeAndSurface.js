@@ -14,10 +14,15 @@
  * This function returns the logical and surface form array
  * associated with a list of blocks/ a template
 */
+import * as Blockly from 'blockly/core';
+
+
 function generateCodeAndSurfaceForm(blocks) {
   const codeList = [];
   const surfaceForms = [];
+  const allBlocks = [];
   let templates = localStorage.getItem('templates');
+  let savedBlocks = JSON.parse(localStorage.getItem('savedByName'));
 
   if (templates) {
     // template information exists
@@ -27,6 +32,7 @@ function generateCodeAndSurfaceForm(blocks) {
     templates = {};
   }
 
+  
   blocks.forEach((element) => {
     console.log("each element...");
     // push code for this element
@@ -41,12 +47,18 @@ function generateCodeAndSurfaceForm(blocks) {
         templates[element.getFieldValue('name')]['surfaceForms'];
       surfaceForm = randomFromList(surfaceForm);
       surfaceForms.push(surfaceForm);
+      allBlocks.push(element);
     } else {
       // this is random
       const randomChoices = element
         .getFieldValue('randomCategories')
         .split(', ');
+
       const choice = randomFromList(randomChoices);
+      const block = savedBlocks[choice];
+      const blockDom = Blockly.Xml.textToDom(block);
+      const blockInfo = blockDom.firstChild;
+      allBlocks.push(blockInfo);
     
       if (!templates[choice]) return false;
   
@@ -67,7 +79,7 @@ function generateCodeAndSurfaceForm(blocks) {
     }
   });
 
-  return [surfaceForms, codeList];
+  return [allBlocks, surfaceForms, codeList];
 }
 export default generateCodeAndSurfaceForm;
 
