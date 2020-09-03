@@ -27,12 +27,15 @@ function saveTemplateObject(block, name) {
   // if categorical
 
   let actionDict = document.getElementById('actionDict').innerText;
-  try {
-    actionDict = JSON.parse(actionDict);
-  }
-  catch (err) {
-    window.alert("Cannot parse the dictionary, try again")
-    return;
+  
+  if (actionDict) {
+    try {
+      actionDict = JSON.parse(actionDict);
+    }
+    catch (err) {
+      window.alert("Cannot parse the dictionary, try again")
+      return;
+    }
   }
 
   let templateObjectsSaved = localStorage.getItem('templates');
