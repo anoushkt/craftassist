@@ -16,8 +16,34 @@
 */
 import * as Blockly from 'blockly/core';
 
+export function getAllSurfaceFormsAndCode(block) {
+  let curCode = null;
+  let surfaceForms = [];
+  let allBlocks = block;
+  let templates = localStorage.getItem('templates');
 
-function generateCodeAndSurfaceForm(blocks) {
+  if (templates) {
+    // template information exists
+    templates = JSON.parse(templates);
+  } else {
+    // no template info exists
+    templates = {};
+  }
+
+  // push code for this element
+  // const parent=element.getFieldValue("parent");
+  if (!templates[block.getFieldValue("name")]) {
+    return [block, '', {}];
+  }
+  curCode = templates[block.getFieldValue('name')]['code'];
+  surfaceForms =
+    templates[block.getFieldValue('name')]['surfaceForms'];
+
+  return [allBlocks, surfaceForms, curCode];
+}
+
+
+export function generateCodeAndSurfaceForm(blocks) {
   const codeList = [];
   const surfaceForms = [];
   const allBlocks = [];
@@ -81,6 +107,7 @@ function generateCodeAndSurfaceForm(blocks) {
 
   return [allBlocks, surfaceForms, codeList];
 }
+
 export default generateCodeAndSurfaceForm;
 
 /**

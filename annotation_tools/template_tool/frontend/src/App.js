@@ -21,7 +21,7 @@ import Button from '@material-ui/core/Button';
 import filterFunction from './dropdownFunctions/filterFunction';
 import searchForBlocks from './dropdownFunctions/searcher';
 import highlightSelectedText from './highlightSelectedText';
-import getCodeForBlocks from './codeGenerator/getCodeForBlocks';
+import { ShowContent, getCodeForBlocks}  from './codeGenerator/getCodeForBlocks';
 import BlocklyComponent, { Block } from './Blockly';
 import { Container, Row, Col } from 'react-grid-system';
 import saveChanges from './saveChanges';
@@ -156,11 +156,20 @@ class App extends React.Component {
               >
                 Generate code
               </Button>
-
               <input
                 id="numberOfGen"
                 placeholder="Number of generations"
               ></input>
+            </Col>
+            <Col sm={1}>
+              <Button
+                  id="showContent"
+                  variant="contained"
+                  color="primary"
+                  onClick={ShowContent}
+                >
+                Show content
+              </Button>
             </Col>
             <Col sm={1}>
               <Button

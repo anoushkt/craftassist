@@ -14,7 +14,7 @@
 import * as Blockly from 'blockly/core';
 import getSpans from '../helperFunctions/getSpans';
 import getTypes from '../helperFunctions/getTypes';
-import generateCodeAndSurfaceForm from
+import {getAllSurfaceFormsAndCode, generateCodeAndSurfaceForm} from 
   '../helperFunctions/generateCodeAndSurface';
 const nestedProperty = require('nested-property');
 const merge = require('deepmerge');
@@ -98,10 +98,23 @@ function getDeepestkey(object) {
   return getDeepest(object).map((a) => a.join('.'))[0];
 }
 
+
 /**
  * This function generates logical, surface form pairs for templates
  */
-function getCodeForBlocks() {
+
+export function ShowContent() {
+  const allBlocksInWorkspace = Blockly.mainWorkspace.getAllBlocks();
+  
+  let allnewBlocks; let surfaceForms; let code;
+  [allnewBlocks, surfaceForms, code] = getAllSurfaceFormsAndCode(allBlocksInWorkspace[0]);
+  surfaceForms = surfaceForms.join('\n');
+  document.getElementById('surfaceForms').innerText = surfaceForms;
+  document.getElementById('actionDict').innerText = JSON.stringify(code, null, 2) + '\n';
+}
+
+
+export function getCodeForBlocks() {
   const allBlocksInWorkspace = Blockly.mainWorkspace.getAllBlocks();
   const allBlocks = [];
   
