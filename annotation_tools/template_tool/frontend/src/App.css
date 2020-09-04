@@ -28,9 +28,6 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
 }
-.blocklySvg {
-  background-color: skyblue;
-}
 #UL {
   /* Remove default list styling */
   list-style-type: none;

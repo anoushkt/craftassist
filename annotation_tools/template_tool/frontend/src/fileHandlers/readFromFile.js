@@ -22,38 +22,37 @@ function restore() {
   const HOST = 'http://localhost:';
   const PORT = '9000';
   fetch(HOST + PORT + '/readAndSaveToFile')
-      .then((res) => res.text())
-      .then((res) => {
-        const result = JSON.parse(res);
-        if (result['savedBlocks']) {
-          localStorage.setItem('savedByName',
-              JSON.stringify(result['savedBlocks']));
-        }
-        if (result['templates']) {
-          localStorage.setItem('templates',
-              JSON.stringify(result['templates']));
-        }
-        if (result['savedByTag']) {
-          localStorage.setItem('tags', JSON.stringify(result['savedByTag']));
-        }
-        if (result['spans']) {
-          localStorage.setItem('spans', JSON.stringify(result['spans']));
-          window.spans = result['spans'];
-        }
-        if (result['blocks']) {
-          localStorage.setItem('blocks', JSON.stringify(result['blocks']));
-        }
+    .then((res) => res.text())
+    .then((res) => {
+      const result = JSON.parse(res);
+      if (result['savedBlocks']) {
+        localStorage.setItem('savedByName',
+          JSON.stringify(result['savedBlocks']));
+      }
+      if (result['templates']) {
+        localStorage.setItem('templates',
+          JSON.stringify(result['templates']));
+      }
+      if (result['savedByTag']) {
+        localStorage.setItem('tags', JSON.stringify(result['savedByTag']));
+      }
+      if (result['spans']) {
+        localStorage.setItem('spans', JSON.stringify(result['spans']));
+        window.spans = result['spans'];
+      }
+      if (result['blocks']) {
+        localStorage.setItem('blocks', JSON.stringify(result['blocks']));
+      }
 
-        if (!localStorage.getItem('reload')) {
+      if (!localStorage.getItem('reload')) {
         /* set reload to true and then reload the page */
-          localStorage.setItem('reload', 'true');
-          window.location.reload();
-        } else {
+        localStorage.setItem('reload', 'true');
+        window.location.reload();
+      } else {
         /* after reloading remove "reload" from localStorage */
-          localStorage.removeItem('reload');
-        }
-      });
-  window.location.reload(true);
+        localStorage.removeItem('reload');
+      }
+    });
 }
 
 export default restore;
