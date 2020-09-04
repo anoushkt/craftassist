@@ -33,7 +33,7 @@ const spanPaths = [
   'has_size',
   'has_orientation',
   'has_thickness',
-  'has_colour',
+  'has_color',
   'has_height',
   'has_length',
   'has_radius',

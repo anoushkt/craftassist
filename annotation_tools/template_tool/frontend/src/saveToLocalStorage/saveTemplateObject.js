@@ -20,11 +20,19 @@ import saveToFile from '../fileHandlers/saveToFile';
  * @param {string} name The name of the block to be saved
  */
 function saveTemplateObject(block, name) {
-  const surfaceForms = document
+  var surfaceForms = document
     .getElementById('surfaceForms')
     .innerText.split('\n');
 
   // if categorical
+  var updatedSurfaceForms = []
+  for (let i = 0; i < surfaceForms.length; i++) {
+    if (surfaceForms[i].length > 0) {
+      updatedSurfaceForms.push(surfaceForms[i]);
+    }
+  }
+
+  surfaceForms = updatedSurfaceForms;
 
   let actionDict = document.getElementById('actionDict').innerText;
   
