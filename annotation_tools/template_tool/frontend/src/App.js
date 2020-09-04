@@ -21,7 +21,7 @@ import Button from '@material-ui/core/Button';
 import filterFunction from './dropdownFunctions/filterFunction';
 import searchForBlocks from './dropdownFunctions/searcher';
 import highlightSelectedText from './highlightSelectedText';
-import { ShowContent, getCodeForBlocks}  from './codeGenerator/getCodeForBlocks';
+import { ShowContent, getCodeForBlocks } from './codeGenerator/getCodeForBlocks';
 import BlocklyComponent, { Block } from './Blockly';
 import { Container, Row, Col } from 'react-grid-system';
 import saveChanges from './saveChanges';
@@ -44,6 +44,10 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.simpleWorkspace = React.createRef();
+  }
+
+  componentDidMount() {
+    restore();
   }
 
   generateCode() {
@@ -163,11 +167,11 @@ class App extends React.Component {
             </Col>
             <Col sm={1}>
               <Button
-                  id="showContent"
-                  variant="contained"
-                  color="primary"
-                  onClick={ShowContent}
-                >
+                id="showContent"
+                variant="contained"
+                color="primary"
+                onClick={ShowContent}
+              >
                 Show block content
               </Button>
             </Col>
@@ -182,16 +186,6 @@ class App extends React.Component {
               </Button>
             </Col>
 
-            <Col sm={1}>
-              <Button
-                id="restorer"
-                variant="contained"
-                color="primary"
-                onClick={restore}
-              >
-                Restore
-              </Button>
-            </Col>
           </Row>
         </div>
 
