@@ -193,7 +193,7 @@ class App extends React.Component {
           <div id="codeHeading">Generated surface-logical forms</div>
           <pre id="generatedCode" contentEditable="true"></pre>
         </div>
-      </div>
+      </div >
     );
   }
 }
