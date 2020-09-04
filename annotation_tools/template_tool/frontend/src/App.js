@@ -168,7 +168,7 @@ class App extends React.Component {
                   color="primary"
                   onClick={ShowContent}
                 >
-                Show content
+                Show block content
               </Button>
             </Col>
             <Col sm={1}>
