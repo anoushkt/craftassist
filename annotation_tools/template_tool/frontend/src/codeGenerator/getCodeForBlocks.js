@@ -51,7 +51,6 @@ const spanPaths = [
   'number'
 ];
 
-
 // This function returns the deepest path in an object
 function getDeepest(object) {
   return object && typeof object === 'object' ?
@@ -157,13 +156,27 @@ export function getCodeForBlocks() {
       // merge current code into the template code
       const deepest = getDeepestkey(code[i]);
       const all = deepest.split('.');
-      const latest = all[all.length - 1];
-      console.log(latest);
-      if (spanPaths.includes(latest)) {
-        // it is a span
-        const spanCount = getSpanCount(spans, surfaceForm, i);
-        nestedProperty.set(code[i], deepest, spanCount);
+      var secondDeepest = deepest;
+      if (all.length > 1) {
+        secondDeepest = all.slice(0, all.length-1).join(".");
       }
+
+      // iterate over every element of last level dictionary
+      let lastLevelSubDict = nestedProperty.get(code[i], secondDeepest);
+      for (let key in lastLevelSubDict) {
+        if (lastLevelSubDict[key] === "") {
+          // it is a span
+          const spanCount = getSpanCount(spans, surfaceForm, i);
+          const deepestKey = secondDeepest + "." + key;
+          nestedProperty.set(code[i], deepestKey, spanCount);
+        }
+      }
+      
+      // if (spanPaths.includes(latest)) {
+      //   // it is a span
+      //   const spanCount = getSpanCount(spans, surfaceForm, i);
+      //   nestedProperty.set(code[i], deepest, spanCount);
+      // }
     }
   }
   const skeletal = generateDictionary(allnewBlocks, code);

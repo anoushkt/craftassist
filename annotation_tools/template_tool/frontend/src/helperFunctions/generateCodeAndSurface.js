@@ -60,7 +60,6 @@ export function generateCodeAndSurfaceForm(blocks) {
 
   
   blocks.forEach((element) => {
-    console.log("each element...");
     // push code for this element
     // const parent=element.getFieldValue("parent");
     if (element.type != 'random') {
