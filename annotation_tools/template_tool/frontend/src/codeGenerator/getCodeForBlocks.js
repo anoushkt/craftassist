@@ -160,17 +160,30 @@ export function getCodeForBlocks() {
       if (all.length > 1) {
         secondDeepest = all.slice(0, all.length-1).join(".");
       }
-
+      
       // iterate over every element of last level dictionary
       let lastLevelSubDict = nestedProperty.get(code[i], secondDeepest);
-      for (let key in lastLevelSubDict) {
-        if (lastLevelSubDict[key] === "") {
-          // it is a span
-          const spanCount = getSpanCount(spans, surfaceForm, i);
-          const deepestKey = secondDeepest + "." + key;
-          nestedProperty.set(code[i], deepestKey, spanCount);
+      console.log(lastLevelSubDict);
+      if (lastLevelSubDict) {
+        for (let key in lastLevelSubDict) {
+          if (lastLevelSubDict[key] === "") {
+            // it is a span
+            const spanCount = getSpanCount(spans, surfaceForm, i);
+            const deepestKey = secondDeepest + "." + key;
+            nestedProperty.set(code[i], deepestKey, spanCount);
+          }
+        }
+      } else {
+        // this is the main dict, no nesting
+        for (let key in code[i]) {
+          if (code[i][key] === "") {
+            // it is a span
+            const spanCount = getSpanCount(spans, surfaceForm, i);
+            code[i][key] = spanCount;
+          }
         }
       }
+
       
       // if (spanPaths.includes(latest)) {
       //   // it is a span
