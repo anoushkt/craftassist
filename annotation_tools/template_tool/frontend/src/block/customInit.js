@@ -12,6 +12,7 @@
 
 import saveBlockCallback from './rightClickCallbacks/saveBlockCallback';
 import tagBlockCallback from './rightClickCallbacks/tagBlockCallback';
+import deleteBlockCallback from './rightClickCallbacks/deleteBlockCallback';
 
 const customInit = (block) => {
   const menuCustomizer = (menu) => {
@@ -21,6 +22,13 @@ const customInit = (block) => {
       callback: () => saveBlockCallback(block),
     };
     menu.push(saveOption);
+
+    const deleteOption = {
+      text: 'Delete block permanently',
+      enabled: true,
+      callback: () => deleteBlockCallback(block),
+    };
+    menu.push(deleteOption);
 
     const tagOption = {
       text: 'Save by tag',

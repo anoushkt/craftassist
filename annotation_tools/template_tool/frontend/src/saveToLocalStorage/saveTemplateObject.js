@@ -24,7 +24,7 @@ function saveTemplateObject(block, name) {
     .getElementById('surfaceForms')
     .innerText.split('\n');
 
-  // if categorical
+  // skip blank surface forms.
   var updatedSurfaceForms = []
   for (let i = 0; i < surfaceForms.length; i++) {
     if (surfaceForms[i].length > 0) {

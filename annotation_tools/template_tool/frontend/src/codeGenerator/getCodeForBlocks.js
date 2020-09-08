@@ -137,7 +137,7 @@ export function getCodeForBlocks() {
   if (templatesString) {
     // refactors
     const templates = JSON.parse(templatesString);
-    const types = getTypes(allnewBlocks).join(' ');
+    const types = getTypes(allBlocks).join(' ');
     if (templates[types]) {
       if (templates[types]['changes']) {
         const changes = templates[types]['changes'];
@@ -179,11 +179,12 @@ export function getCodeForBlocks() {
       // }
     }
   }
-  const skeletal = generateDictionary(allnewBlocks, code);
+  const skeletal = generateDictionary(allBlocks, code);
+  var newsurfaceForm = surfaceForm.replace(/\s+/g,' ').trim();
   document.getElementById('generatedCode').innerText +=
-    surfaceForm + '     ' + JSON.stringify(skeletal, null, 2) + '\n';
+  newsurfaceForm + '     ' + JSON.stringify(skeletal, null, 2) + '\n';
 
-  document.getElementById('surfaceForms').innerText += surfaceForm + '\n';
+  document.getElementById('surfaceForms').innerText += newsurfaceForm + '\n';
   localStorage.setItem(
     'current',
     document.getElementById('surfaceForms').innerText,
