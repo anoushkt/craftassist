@@ -58,11 +58,13 @@ function searchForBlocks() {
     namedInfo = JSON.parse(namedInfoString);
     if (namedInfo[nameOrTag]) {
       // this name exists
+
       const block = namedInfo[nameOrTag];
       const blockDom = Blockly.Xml.textToDom(block);
       const blockInfo = blockDom.firstChild;
-      $('#toolBox').append(blockInfo);
-      Blockly.mainWorkspace.updateToolbox(document.getElementById('toolBox'));
+      Blockly.Xml.domToWorkspace(blockDom, Blockly.mainWorkspace);
+      //$('#toolBox').append(blockInfo);
+      //Blockly.mainWorkspace.updateToolbox(document.getElementById('toolBox'));
     }
   }
 }
