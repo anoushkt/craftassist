@@ -11,11 +11,6 @@ import copy
 import xml.etree.ElementTree as ET
 
 
-path = './../templates.txt'
-data_file = open(path, 'r')
-data_read = json.loads(data_file.read())
-
-
 def getSpanKeys(d):
     if d is None:
         return
@@ -171,56 +166,89 @@ def fixTemplatesWithRandomBlock(codeList, surfaceFormList):
             updatedSurfaceFormList.append(surfaceForm)
     return updatedCodeList, updatedSurfaceFormList
 
-
-# initialise an array of generators
-arrayOfObjects = []
-spans = data_read['spans']
-templatesSaved = data_read['templates']
-savedBlocks = data_read['savedBlocks']
-
-for k, v in templatesSaved.items():
-    templateContent = v
-    templateContentCopy = copy.deepcopy(templateContent)
-
-    # fix random blocks to have one code block and one surface form
-    if getBLockType(savedBlocks, k) == "random":
-        rnd_index = random.choice(range(len(templateContent['code'])))
-        code = templateContent['code'][rnd_index]
-        surfaceForm = templateContent['surfaceForms'][rnd_index]
-        templateContentCopy['code'] = code
-        templateContentCopy['surfaceForm'] = surfaceForm
-    info = {}
-    info['code'] = {}
-    # check for random templates
-    i += 1
-    if ('code' in templateContentCopy.keys()):
-        if not isinstance(templateContentCopy['code'], list):
-            # skip template objects...
-            # info['code'] = [info['code']]
-            continue
-        info['code'] = templateContentCopy['code']
-    # Template object with no code
-    if not info['code']:
-        continue
+def getAllTemplates(template_data):
+    spans = template_data['spans']
+    templatesSaved = template_data['templates']
+    savedBlocks = template_data['savedBlocks']
+    templates = {}
     
-    info['spans'] = spans
-    info['surfaceForms'] = templateContentCopy['surfaceForms']
+    for k, v in templatesSaved.items():
+        templateContent = v
+        templateContentCopy = copy.deepcopy(templateContent)
 
-    if not isinstance(info['surfaceForms'][0], list):
-        # it is a surface form
-        info['surfaceForms'] = [info['surfaceForms']]
+        # fix random blocks to have one code block and one surface form
+        if getBLockType(savedBlocks, k) == "random":
+            rnd_index = random.choice(range(len(templateContent['code'])))
+            code = templateContent['code'][rnd_index]
+            surfaceForm = templateContent['surfaceForms'][rnd_index]
+            templateContentCopy['code'] = code
+            templateContentCopy['surfaceForm'] = surfaceForm
+        info = {}
+        info['code'] = {}
 
-    code, surfaceForm = fixTemplatesWithRandomBlock(info['code'], info['surfaceForms'])
-    info['code'] = code
-    info['surfaceForms'] = surfaceForm
-    arrayOfObjects.append([k, Generator(info)])
+        if ('code' in templateContentCopy.keys()):
+            if not isinstance(templateContentCopy['code'], list):
+                # skip template objects...
+                # info['code'] = [info['code']]
+                continue
+            info['code'] = templateContentCopy['code']
+        # Template object with no code
+        if not info['code']:
+            continue
+        
+        info['spans'] = spans
+        info['surfaceForms'] = templateContentCopy['surfaceForms']
+
+        # if not isinstance(info['surfaceForms'][0], list):
+        #     # it is a surface form
+        #     info['surfaceForms'] = [info['surfaceForms']]
+
+        code, surfaceForm = fixTemplatesWithRandomBlock(info['code'], info['surfaceForms'])
+        info['code'] = code
+        info['surfaceForms'] = surfaceForm
+        templates[k] = info    
+    return templates
 
 
-for obj in arrayOfObjects:
-    template_name, generation_obj = obj
-    # generate logical-surface form pair array for the template
-    generation_pair = generation_obj.__generate__()
-    # print(template_name)
-    print(generation_pair[0])
-    pprint(generation_pair[1])
-    print()
+def generatePairs(templates, num_gens):
+    # initialise an array of generators
+    arrayOfObjects = []
+    # generate num_gens pairs
+    for i in range(num_gens):
+        # pick a random template
+        templateName = random.choice(list(templates))
+        info = copy.deepcopy(templates[templateName])
+        arrayOfObjects.append([templateName, Generator(info)])
+    
+    return arrayOfObjects
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--num_gens", type=int, default=100)
+    parser.add_argument("--out_file", type=str, default="out.txt")
+    parser.add_argument("--input_file", type=str, default="./../templates.txt")
+    parser.add_argument("--format", action="store_true", help="this flag tells the script to generate formatted training data")
+    args = parser.parse_args()
+
+    template_data = {}
+
+    with open(args.input_file, 'r') as f:
+        template_data = json.load(f)
+
+    templates = getAllTemplates(template_data)
+    generationPairs = generatePairs(templates, args.num_gens)
+
+    with open(args.out_file, 'w') as f:
+        for obj in generationPairs:
+            template_name, generation_obj = obj
+            # generate logical-surface form pair array for the template
+            text, action_dict = generation_obj.__generate__()
+            if args.format:
+                f.write(text+"|"+json.dumps(action_dict)+"\n")
+            else:
+                print(template_name)
+                print(text)
+                pprint(action_dict)
+                print()
