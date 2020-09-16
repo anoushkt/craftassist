@@ -6,44 +6,24 @@ import json
 from nested_lookup import nested_update
 from nested_lookup import nested_lookup
 from deepmerge import always_merger
+from pprint import pprint
+import copy
+import xml.etree.ElementTree as ET
+
 
 path = './../templates.txt'
 data_file = open(path, 'r')
 data_read = json.loads(data_file.read())
 
-# keys where the value is to be replaced by a span index
-span_paths = [
-  "block_type",
-  "steps",
-  "has_measure",
-  "has_name",
-  "has_size",
-  "has_colour",
-  "repeat_count",
-  "ordinal",
-  "has_block_type",
-  "has_name",
-  "has_size",
-  "has_orientation",
-  "has_thickness",
-  "has_colour",
-  "has_height",
-  "has_length",
-  "has_radius",
-  "has_slope",
-  "has_width",
-  "has_base",
-  "has_depth",
-  "has_distance",
-  "text_span",
-  "pitch",
-  "yaw",
-  "yaw_pitch",
-  "coordinates_span",
-  "ordinal",
-  "has_color",
-  "number"
-]
+
+def getSpanKeys(d):
+    if d is None:
+        return
+    for k, v in d.items():
+        if v == '':
+            yield k
+        elif type(v) == dict:
+            yield from getSpanKeys(v)
 
 
 def set_span(code, surface_form, span_value):
@@ -54,7 +34,8 @@ def set_span(code, surface_form, span_value):
     start_span = surface_form_words.index(span_array[0])
     end_span = start_span + len(span_array) - 1
     span = [0, [start_span, end_span]]
-    for spans in span_paths:
+    spanKeys = getSpanKeys(copy.deepcopy(code))   
+    for spans in spanKeys:
         code = nested_update(code, key=spans, value=span)
     return code
 
@@ -80,12 +61,13 @@ class Generator():
         return self.next()
 
     def __generate__(self):
-        generations = []
-        while self.num < self.n:
-            generations.append(self.next())
-            self.num += 1
-        print(generations)
-        return generations
+        # generation = None
+        # while self.num < self.n:
+        #     generations.append(self.next())
+        #     self.num += 1
+        # print(generations[0])
+        generation = self.next()
+        return generation
 
     def next(self):
         """ next function following the iterable pattern """
@@ -139,7 +121,7 @@ def generate_dictionary(code, i=0, skeletal=None):
     found = False
     if code[i]:
         cur_code = code[i]
-        key = cur_code.keys()[0]
+        key = list(cur_code.keys())[0]
         if nested_lookup(key, skeletal):
             # the parent key exists
             found = True
@@ -148,33 +130,97 @@ def generate_dictionary(code, i=0, skeletal=None):
             nested_update(skeletal, key, new_value)
         if not found:
             skeletal = always_merger.merge(skeletal, cur_code)
-    return generate_dictionary(code, i + 1, skeletal)
+    return generate_dictionary(code, i=i + 1, skeletal=skeletal)
+
+
+def getBLockType(savedBlocks, block_name):
+    treeOne = ET.fromstring(savedBlocks[block_name])
+    block_type = treeOne[0].attrib['type']
+    return block_type
+
+
+def update_list_value(d, rnd_index):
+    new_d = copy.deepcopy(d)
+    for k, v in d.items():
+        if type(v) == list:
+            new_d[k] = v[rnd_index]
+        elif type(v) == dict:
+            new_d[k] = update_list_value(v, rnd_index)
+        else:
+            new_d[k] = v
+    return new_d
+
+
+def fixTemplatesWithRandomBlock(codeList, surfaceFormList):
+    updatedCodeList, updatedSurfaceFormList = [], []
+    for code, surfaceForm in zip(codeList, surfaceFormList):
+        if type(surfaceForm[0]) == list:
+            rnd_index = random.choice(range(len(surfaceForm)))
+            if code == None:
+                updatedCodeList.append(code)
+            # code is list
+            if type(code) == list:
+                updatedCodeList.append(code[rnd_index])
+            else:
+                # code has a nested list somewhere in the dict
+                updatedCode = update_list_value(code, rnd_index)
+                updatedCodeList.append(updatedCode)
+            updatedSurfaceFormList.append(surfaceForm[rnd_index])
+        else:
+            updatedCodeList.append(code)
+            updatedSurfaceFormList.append(surfaceForm)
+    return updatedCodeList, updatedSurfaceFormList
 
 
 # initialise an array of generators
 arrayOfObjects = []
 spans = data_read['spans']
 templatesSaved = data_read['templates']
-for template in templatesSaved:
-    templateContent = templatesSaved[template]
+savedBlocks = data_read['savedBlocks']
+
+for k, v in templatesSaved.items():
+    templateContent = v
+    templateContentCopy = copy.deepcopy(templateContent)
+
+    # fix random blocks to have one code block and one surface form
+    if getBLockType(savedBlocks, k) == "random":
+        rnd_index = random.choice(range(len(templateContent['code'])))
+        code = templateContent['code'][rnd_index]
+        surfaceForm = templateContent['surfaceForms'][rnd_index]
+        templateContentCopy['code'] = code
+        templateContentCopy['surfaceForm'] = surfaceForm
     info = {}
-    if ('code' in templateContent.keys()):
-        info['code'] = templateContent['code']
-        if not isinstance(info['code'], list):
-            # it is a template object
-            info['code'] = [info['code']]
-    else:
-        # no code associated with the template
-        info['code'] = {}
+    info['code'] = {}
+    # check for random templates
+    i += 1
+    if ('code' in templateContentCopy.keys()):
+        if not isinstance(templateContentCopy['code'], list):
+            # skip template objects...
+            # info['code'] = [info['code']]
+            continue
+        info['code'] = templateContentCopy['code']
+    # Template object with no code
+    if not info['code']:
+        continue
+    
     info['spans'] = spans
-    info['surfaceForms'] = templateContent['surfaceForms']
+    info['surfaceForms'] = templateContentCopy['surfaceForms']
 
     if not isinstance(info['surfaceForms'][0], list):
         # it is a surface form
         info['surfaceForms'] = [info['surfaceForms']]
 
-    arrayOfObjects.append(Generator(info))
+    code, surfaceForm = fixTemplatesWithRandomBlock(info['code'], info['surfaceForms'])
+    info['code'] = code
+    info['surfaceForms'] = surfaceForm
+    arrayOfObjects.append([k, Generator(info)])
+
 
 for obj in arrayOfObjects:
+    template_name, generation_obj = obj
     # generate logical-surface form pair array for the template
-    obj.__generate__()
+    generation_pair = generation_obj.__generate__()
+    # print(template_name)
+    print(generation_pair[0])
+    pprint(generation_pair[1])
+    print()
