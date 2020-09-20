@@ -15,7 +15,7 @@ def getSpanKeys(d):
     if d is None:
         return
     for k, v in d.items():
-        if v == '':
+        if v == "":
             yield k
         elif type(v) == dict:
             yield from getSpanKeys(v)
@@ -29,13 +29,13 @@ def set_span(code, surface_form, span_value):
     start_span = surface_form_words.index(span_array[0])
     end_span = start_span + len(span_array) - 1
     span = [0, [start_span, end_span]]
-    spanKeys = getSpanKeys(copy.deepcopy(code))   
+    spanKeys = getSpanKeys(copy.deepcopy(code))
     for spans in spanKeys:
         code = nested_update(code, key=spans, value=span)
     return code
 
 
-class Generator():
+class Generator:
     """This is a Generator class that is initialised for templates
     using template information saved from the template interface """
 
@@ -130,7 +130,7 @@ def generate_dictionary(code, i=0, skeletal=None):
 
 def getBLockType(savedBlocks, block_name):
     treeOne = ET.fromstring(savedBlocks[block_name])
-    block_type = treeOne[0].attrib['type']
+    block_type = treeOne[0].attrib["type"]
     return block_type
 
 
@@ -166,47 +166,48 @@ def fixTemplatesWithRandomBlock(codeList, surfaceFormList):
             updatedSurfaceFormList.append(surfaceForm)
     return updatedCodeList, updatedSurfaceFormList
 
+
 def getAllTemplates(template_data):
-    spans = template_data['spans']
-    templatesSaved = template_data['templates']
-    savedBlocks = template_data['savedBlocks']
+    spans = template_data["spans"]
+    templatesSaved = template_data["templates"]
+    savedBlocks = template_data["savedBlocks"]
     templates = {}
-    
+
     for k, v in templatesSaved.items():
         templateContent = v
         templateContentCopy = copy.deepcopy(templateContent)
 
         # fix random blocks to have one code block and one surface form
         if getBLockType(savedBlocks, k) == "random":
-            rnd_index = random.choice(range(len(templateContent['code'])))
-            code = templateContent['code'][rnd_index]
-            surfaceForm = templateContent['surfaceForms'][rnd_index]
-            templateContentCopy['code'] = code
-            templateContentCopy['surfaceForm'] = surfaceForm
+            rnd_index = random.choice(range(len(templateContent["code"])))
+            code = templateContent["code"][rnd_index]
+            surfaceForm = templateContent["surfaceForms"][rnd_index]
+            templateContentCopy["code"] = code
+            templateContentCopy["surfaceForm"] = surfaceForm
         info = {}
-        info['code'] = {}
+        info["code"] = {}
 
-        if ('code' in templateContentCopy.keys()):
-            if not isinstance(templateContentCopy['code'], list):
+        if "code" in templateContentCopy.keys():
+            if not isinstance(templateContentCopy["code"], list):
                 # skip template objects...
                 # info['code'] = [info['code']]
                 continue
-            info['code'] = templateContentCopy['code']
+            info["code"] = templateContentCopy["code"]
         # Template object with no code
-        if not info['code']:
+        if not info["code"]:
             continue
-        
-        info['spans'] = spans
-        info['surfaceForms'] = templateContentCopy['surfaceForms']
+
+        info["spans"] = spans
+        info["surfaceForms"] = templateContentCopy["surfaceForms"]
 
         # if not isinstance(info['surfaceForms'][0], list):
         #     # it is a surface form
         #     info['surfaceForms'] = [info['surfaceForms']]
 
-        code, surfaceForm = fixTemplatesWithRandomBlock(info['code'], info['surfaceForms'])
-        info['code'] = code
-        info['surfaceForms'] = surfaceForm
-        templates[k] = info    
+        code, surfaceForm = fixTemplatesWithRandomBlock(info["code"], info["surfaceForms"])
+        info["code"] = code
+        info["surfaceForms"] = surfaceForm
+        templates[k] = info
     return templates
 
 
@@ -219,8 +220,9 @@ def generatePairs(templates, num_gens):
         templateName = random.choice(list(templates))
         info = copy.deepcopy(templates[templateName])
         arrayOfObjects.append([templateName, Generator(info)])
-    
+
     return arrayOfObjects
+
 
 if __name__ == "__main__":
     import argparse
@@ -229,26 +231,34 @@ if __name__ == "__main__":
     parser.add_argument("--num_gens", type=int, default=100)
     parser.add_argument("--out_file", type=str, default="out.txt")
     parser.add_argument("--input_file", type=str, default="./../templates.txt")
-    parser.add_argument("--format", action="store_true", help="this flag tells the script to generate formatted training data")
+    parser.add_argument(
+        "--format",
+        action="store_true",
+        help="this flag tells the script to generate formatted training data",
+    )
     args = parser.parse_args()
 
     template_data = {}
 
-    with open(args.input_file, 'r') as f:
+    with open(args.input_file, "r") as f:
         template_data = json.load(f)
 
     templates = getAllTemplates(template_data)
     generationPairs = generatePairs(templates, args.num_gens)
 
-    with open(args.out_file, 'w') as f:
+    with open(args.out_file, "w") as f:
         for obj in generationPairs:
             template_name, generation_obj = obj
             # generate logical-surface form pair array for the template
             text, action_dict = generation_obj.__generate__()
+            updated_dict = {
+                "dialogue_type": "HUMAN_GIVE_COMMAND",
+                "action_sequence": [action_dict],
+            }
             if args.format:
-                f.write(text+"|"+json.dumps(action_dict)+"\n")
+                f.write(text + "|" + json.dumps(updated_dict) + "\n")
             else:
-                print(template_name)
+                # print(template_name)
                 print(text)
-                pprint(action_dict)
+                print(updated_dict)
                 print()
